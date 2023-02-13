@@ -206,6 +206,9 @@
       </svg>
     </a>
   </div>
+  <div class="navbar-center flex">
+      <button on:click|once={handleClick} class="btn btn-success shadow-md">Sort</button>
+  </div>
   <div style="display:none" class="navbar-center flex">
     <ul class="menu menu-horizontal px-1">
       <li><a data-sveltekit-reload href='/sorting'>Refresh</a></li>
@@ -220,16 +223,18 @@
 
 <div class="container mx-auto flex flex-wrap lg:flex-nowrap justify-center">
   {#each candidate_array as candidate (candidate.name) }
-  <Card type ={'person'} subject = {candidate} subtitle = {"Select Entities in order of preference:"} list = {entity_array} sort_complete = {sort_complete} />
+    <Card type ={'person'} subject = {candidate} subtitle = {"Select Entities in order of preference:"} list = {entity_array} sort_complete = {sort_complete} />
   {/each}
 </div>
 
-<div class="container mx-auto flex justify-center">
-  <button on:click|once={handleClick} class="btn btn-wide btn-success m-4 p-2 shadow-md">Run Sorting Algorithm</button>
+<div class="flex flex-col">
+  <div class="divider">
+    <button on:click|once={handleClick} class="btn btn-wide btn-success m-4 p-2 shadow-md">Run Sorting Algorithm</button>
+  </div>
 </div>
 
 
-<div class="container mx-auto flex justify-center">
+<div class="container mx-auto flex flex-wrap lg:flex-nowrap justify-center">
   {#each entity_array as entity (entity.name) }
     <Card type = {'entity'} subject = {entity} subtitle = {"Select Candidates in order of preference:"} list = {candidate_array} sort_complete = {sort_complete}/>
   {/each}
