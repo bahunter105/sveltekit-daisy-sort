@@ -18,7 +18,7 @@
       "_index.js"
     ],
     "css": [
-      "_app/immutable/assets/_layout-4c95420a.css"
+      "_app/immutable/assets/_layout-71921d6e.css"
     ]
   },
   "node_modules/@sveltejs/kit/src/runtime/components/error.svelte": {
@@ -38,6 +38,14 @@
     ],
     "assets": [
       "_app/immutable/assets/kelly-sikkema-8jjQ4hmCOcM-unsplash-becb0029.jpg"
+    ]
+  },
+  "src/routes/canvas/+page.svelte": {
+    "file": "entries/pages/canvas/_page.svelte.js",
+    "src": "src/routes/canvas/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index.js"
     ]
   },
   "src/routes/sorting/+page.svelte": {
