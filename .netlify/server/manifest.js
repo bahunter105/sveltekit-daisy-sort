@@ -4,12 +4,13 @@ export const manifest = {
 	assets: new Set(["favicon.png"]),
 	mimeTypes: {".png":"image/png"},
 	_: {
-		entry: {"file":"_app/immutable/start-f62ad37b.js","imports":["_app/immutable/start-f62ad37b.js","_app/immutable/chunks/index-40f0fc6a.js","_app/immutable/chunks/singletons-51a44ecb.js"],"stylesheets":[],"fonts":[]},
+		entry: {"file":"_app/immutable/start-829b7569.js","imports":["_app/immutable/start-829b7569.js","_app/immutable/chunks/index-993c111a.js","_app/immutable/chunks/singletons-15e13c19.js"],"stylesheets":[],"fonts":[]},
 		nodes: [
 			() => import('./nodes/0.js'),
 			() => import('./nodes/1.js'),
 			() => import('./nodes/2.js'),
-			() => import('./nodes/3.js')
+			() => import('./nodes/3.js'),
+			() => import('./nodes/4.js')
 		],
 		routes: [
 			{
@@ -20,10 +21,17 @@ export const manifest = {
 				endpoint: null
 			},
 			{
+				id: "/canvas",
+				pattern: /^\/canvas\/?$/,
+				params: [],
+				page: { layouts: [0], errors: [1], leaf: 3 },
+				endpoint: null
+			},
+			{
 				id: "/sorting",
 				pattern: /^\/sorting\/?$/,
 				params: [],
-				page: { layouts: [0], errors: [1], leaf: 3 },
+				page: { layouts: [0], errors: [1], leaf: 4 },
 				endpoint: null
 			}
 		],
