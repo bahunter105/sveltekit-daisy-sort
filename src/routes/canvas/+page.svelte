@@ -1,39 +1,59 @@
 <script>
   import Konva from 'konva'
   import {onMount} from "svelte"
-  import plusCircle from '$lib/images/plus-circle.svg'
+  import {onDestroy} from "svelte"
+  import plusCircleSVG from '$lib/images/plus-circle.svg'
+  import createPersonSVG from '$lib/images/Create Person.svg'
+  import createTeamSVG from '$lib/images/Create Team.svg'
+  import teamSVG from '$lib/images/Team Created.svg'
+  import personSVG from '$lib/images/Person Blob.svg'
+  import infoButtonSVG from '$lib/images/i-blob.svg'
+  import orangeAddSVG from '$lib/images/Orange Add.svg'
+  import createtemplateSVG from '$lib/images/Component 10.svg'
+
+
   $: outerWidth = 0
 	$: innerWidth = 0
 	$: outerHeight = 0
 	$: innerHeight = 0
 
-  let stageWidth = 100
-  let stageHeight = 100
+  // let stageWidth = 100
+  // let stageHeight = 100
+
+  let stage
+  // set an Array of Shapes
+  let shapesArray = []
 
   onMount(()=> {
-    const stage = new Konva.Stage({
-    container: 'canvas',
-    width: innerWidth,
-    height: innerHeight,
-  });
-    stageWidth = stage.width()
-    stageHeight =stage.height()
+    stage = new Konva.Stage({
+      container: 'canvas',
+      width: innerWidth,
+      height: innerHeight,
+    });
+
     let layer = new Konva.Layer();
-    // let circle = new Konva.Circle({
-    //     x: stage.width() / 2,
-    //     y: stage.height() / 2,
-    //     radius: 70,
-    //     fill: 'red',
-    //     stroke: 'black',
-    //     strokeWidth: 4,
-    //     draggable: true,
-    //   });
-    // layer.add(circle)
-    Konva.Image.fromURL(plusCircle, (imageNode) => {
+
+    // add transform layer
+    let tr = new Konva.Transformer();
+    layer.add(tr);
+
+    // // by default select all shapes
+    // tr.nodes([rect1, rect2]);
+
+    // call XY coordinates of plusCircle for later use
+    let plusCircleX
+    let plusCircleY
+
+    // add the plusCircle
+    let plusCircle = Konva.Image.fromURL(plusCircleSVG, (imageNode) => {
       layer.add(imageNode);
       imageNode.setAttrs({
-        x: stage.width() / 2,
-        y: stage.height() / 2,
+        x: stage.width() * 0.0825,
+        y: stage.height() * 0.09335219236,
+        // x: stage.width() / 2,
+        // y: stage.height() / 2,
+        offsetX:50,
+        offsetY: 50,
         width: 100,
         height: 100,
         draggable: true,
@@ -46,7 +66,449 @@
       imageNode.on('mouseout', function () {
         document.body.style.cursor = 'default';
       });
+
+      plusCircleX = imageNode.x()
+      plusCircleY = imageNode.y()
+
+      imageNode.on('mouseover', function () {
+        console.log(`${imageNode.x()} x ${imageNode.y()}`);
+        console.log(`${plusCircleX} x ${plusCircleY}`);
+      });
+
+      // add to tranform layer
+      // tr.node(imageNode)
+
+      shapesArray.push(imageNode)
     });
+    plusCircle
+
+    // add createPerson
+    let createPerson = Konva.Image.fromURL(createPersonSVG, (imageNode) => {
+      layer.add(imageNode);
+      imageNode.setAttrs({
+        // x = radius * Math.cos(Math.PI * angle / 180);
+        x: plusCircleX + 100 * Math.cos(Math.PI * 60 / 180),
+        // y = radius * Math.sin(Math.PI * angle / 180);
+        y: plusCircleY + 100 * Math.sin(Math.PI * 60 / 180),
+        // x: 0,
+        // y: 0,
+        width: 66,
+        height: 66,
+        offsetX: 33,
+        offsetY: 33,
+        draggable: true,
+      });
+
+      // add cursor styling
+      imageNode.on('mouseover', function () {
+        document.body.style.cursor = 'pointer';
+      });
+      imageNode.on('mouseout', function () {
+        document.body.style.cursor = 'default';
+      });
+
+      imageNode.on('mouseover', function () {
+        console.log(`${imageNode.x()} x ${imageNode.y()}`);
+      });
+
+      // add to tranform layer
+      // tr.node(imageNode)
+      shapesArray.push(imageNode)
+    });
+    createPerson
+
+    // add createTeam
+    let createTeam = Konva.Image.fromURL(createTeamSVG, (imageNode) => {
+      layer.add(imageNode);
+      imageNode.setAttrs({
+        // x = radius * Math.cos(Math.PI * angle / 180);
+        x: plusCircleX + 100 * Math.cos(Math.PI * 0 / 180),
+        // y = radius * Math.sin(Math.PI * angle / 180);
+        y: plusCircleY + 100 * Math.sin(Math.PI * 0 / 180),
+        // x: 0,
+        // y: 0,
+        width: 66,
+        height: 66,
+        offsetX: 33,
+        offsetY: 33,
+        draggable: true,
+      });
+
+      // add cursor styling
+      imageNode.on('mouseover', function () {
+        document.body.style.cursor = 'pointer';
+      });
+      imageNode.on('mouseout', function () {
+        document.body.style.cursor = 'default';
+      });
+
+      imageNode.on('mouseover', function () {
+        console.log(`${imageNode.x()} x ${imageNode.y()}`);
+      });
+
+      // add to tranform layer
+      // tr.node(imageNode)
+      shapesArray.push(imageNode)
+    });
+    createTeam
+
+    // let createtemplate = Konva.Image.fromURL(createtemplateSVG, (imageNode) => {
+    //   layer.add(imageNode);
+    //   imageNode.setAttrs({
+    //     x: 350,
+    //     y: 0,
+    //     width: 300,
+    //     height: 250,
+    //     draggable: true,
+    //   });
+
+    //   // add cursor styling
+    //   imageNode.on('mouseover', function () {
+    //     document.body.style.cursor = 'pointer';
+    //   });
+    //   imageNode.on('mouseout', function () {
+    //     document.body.style.cursor = 'default';
+    //   });
+
+    //   imageNode.on('mouseover', function () {
+    //       console.log(`${imageNode.x()} x ${imageNode.y()}`);
+    //     });
+    // });
+    // createtemplate
+
+    // create group for Team Bubbles
+    let teamGroup = new Konva.Group({
+      draggable: true,
+    })
+    let teamX
+    let teamY
+    // add team
+    let team = Konva.Image.fromURL(teamSVG, (imageNode) => {
+      // layer.add(imageNode);
+      teamGroup.add(imageNode);
+
+      imageNode.setAttrs({
+        x: stage.width() / 1.3,
+        y: stage.height() / 5,
+        width: 180,
+        height: 180,
+        offsetX: 90,
+        offsetY: 90,
+        // draggable: true,
+      });
+
+      // add cursor styling
+      imageNode.on('mouseover', function () {
+        document.body.style.cursor = 'pointer';
+      });
+      imageNode.on('mouseout', function () {
+        document.body.style.cursor = 'default';
+      });
+
+      imageNode.on('mouseover', function () {
+        console.log(`${imageNode.x()} x ${imageNode.y()}`);
+      });
+
+      teamX = imageNode.x()
+      teamY = imageNode.y()
+      // add to tranform layer
+      // tr.node(imageNode)
+      // shapesArray.push(imageNode)
+    });
+    team
+
+    // add orangeAdd
+    let orangeAdd = Konva.Image.fromURL(orangeAddSVG, (imageNode) => {
+      // layer.add(imageNode);
+      teamGroup.add(imageNode);
+      imageNode.setAttrs({
+        // x = radius * Math.cos(Math.PI * angle / 180);
+        x: teamX + 66 * Math.cos(Math.PI * 35 / 180),
+        // y = radius * Math.sin(Math.PI * angle / 180);
+        y: teamY + 66 * Math.sin(Math.PI * 35 / 180),
+        // x: 0,
+        // y: 0,
+        width: 40,
+        height: 40,
+        offsetX: 20,
+        offsetY: 20,
+        // draggable: true,
+      });
+
+      // add cursor styling
+      imageNode.on('mouseover', function () {
+        document.body.style.cursor = 'pointer';
+      });
+      imageNode.on('mouseout', function () {
+        document.body.style.cursor = 'default';
+      });
+
+      imageNode.on('mouseover', function () {
+        console.log(`${imageNode.x()} x ${imageNode.y()}`);
+      });
+
+      // add to tranform layer
+      // tr.node(imageNode)
+      shapesArray.push(imageNode)
+    });
+    orangeAdd
+
+    // add infoButton
+    let infoButton = Konva.Image.fromURL(infoButtonSVG, (imageNode) => {
+      // layer.add(imageNode);
+      teamGroup.add(imageNode);
+      imageNode.setAttrs({
+        // x = radius * Math.cos(Math.PI * angle / 180);
+        x: teamX + 77 * Math.cos(Math.PI * -35 / 180),
+        // y = radius * Math.sin(Math.PI * angle / 180);
+        y: teamY + 77 * Math.sin(Math.PI * -35 / 180),
+        // x: 0,
+        // y: 0,
+        width: 56,
+        height: 56,
+        offsetX: 28,
+        offsetY: 28,
+        // draggable: true,
+      });
+
+      // add cursor styling
+      imageNode.on('mouseover', function () {
+        document.body.style.cursor = 'pointer';
+      });
+      imageNode.on('mouseout', function () {
+        document.body.style.cursor = 'default';
+      });
+
+      imageNode.on('mouseover', function () {
+        console.log(`${imageNode.x()} x ${imageNode.y()}`);
+      });
+
+      // add to tranform layer
+      // tr.node(imageNode)
+      shapesArray.push(imageNode)
+    });
+    infoButton
+
+    layer.add(teamGroup)
+
+
+    // create group for Full Team Bubbles
+    let fullteamGroup = new Konva.Group({
+      draggable: true,
+    })
+
+    let fullteamX  = stage.width() / 1.6
+    let fullteamY = stage.height() / 1.4
+
+    // add fullteam
+    let fullteam = Konva.Image.fromURL(teamSVG, (imageNode) => {
+      // layer.add(imageNode);
+      fullteamGroup.add(imageNode);
+
+      imageNode.setAttrs({
+        x: fullteamX,
+        y: fullteamY,
+        width: 180,
+        height: 180,
+        offsetX: 90,
+        offsetY: 90,
+        // draggable: true,
+      });
+
+      // add cursor styling
+      imageNode.on('mouseover', function () {
+        document.body.style.cursor = 'pointer';
+      });
+      imageNode.on('mouseout', function () {
+        document.body.style.cursor = 'default';
+      });
+
+      imageNode.on('mouseover', function () {
+        console.log(`${imageNode.x()} x ${imageNode.y()}`);
+      });
+
+      // fullteamX = imageNode.x()
+      // fullteamY = imageNode.y()
+      // add to tranform layer
+      // tr.node(imageNode)
+      // shapesArray.push(imageNode)
+    });
+    fullteam
+
+    console.log(fullteamX)
+
+    var orbitCircle = new Konva.Circle({
+      x: fullteamX,
+      y: fullteamY,
+      radius: 110,
+      offsetX: 3,
+      offsetY: 3,
+      fill: 'rgba(0,0,255,0)',
+      stroke: 'rgb(255, 168, 0, 0.5)',
+      strokeWidth: 1,
+      dash: [1,1]
+    });
+
+    fullteamGroup.add(orbitCircle);
+
+
+    // add Person Blob
+    let personDegree = -45
+    function personBlob(personDegree) {
+      Konva.Image.fromURL(personSVG, (imageNode) => {
+        // layer.add(imageNode);
+        let personGroup = new Konva.Group({
+          draggable: true,
+        })
+        personGroup.add(imageNode);
+        imageNode.setAttrs({
+          // x = radius * Math.cos(Math.PI * angle / 180);
+          x: fullteamX + 110 * Math.cos(Math.PI * personDegree / 180),
+          // y = radius * Math.sin(Math.PI * angle / 180);
+          y: fullteamY + 110 * Math.sin(Math.PI * personDegree / 180),
+          // x: 0,
+          // y: 0,
+          width: 60,
+          height: 60,
+          offsetX: 30,
+          offsetY: 30,
+          // draggable: true,
+        });
+
+        var textName = new Konva.Text({
+          text: 'Person Name',
+          x: imageNode.x() + 20,
+          y: imageNode.y() - 15,
+          fontSize: 10,
+          fontStyle: 'bold italic',
+        });
+        personGroup.add(textName)
+
+        var textTitle = new Konva.Text({
+          text: 'Title',
+          x: imageNode.x() + 20,
+          y: imageNode.y() - 3,
+          fontSize: 10,
+          fontStyle: 'italic',
+        });
+        personGroup.add(textTitle)
+        fullteamGroup.add(personGroup)
+        // add cursor styling
+        imageNode.on('mouseover', function () {
+          document.body.style.cursor = 'pointer';
+        });
+        imageNode.on('mouseout', function () {
+          document.body.style.cursor = 'default';
+        });
+
+        imageNode.on('mouseover', function () {
+          console.log(`${imageNode.x()} x ${imageNode.y()}`);
+        });
+
+        // add to tranform layer
+        // tr.node(imageNode)
+        shapesArray.push(imageNode)
+      });
+    }
+    // let personBlob = Konva.Image.fromURL(personSVG, (imageNode) => {
+    //   // layer.add(imageNode);
+    //   let personGroup = new Konva.Group({
+    //     draggable: true,
+    //   })
+    //   personGroup.add(imageNode);
+    //   imageNode.setAttrs({
+    //     // x = radius * Math.cos(Math.PI * angle / 180);
+    //     x: fullteamX + 110 * Math.cos(Math.PI * personDegree / 180),
+    //     // y = radius * Math.sin(Math.PI * angle / 180);
+    //     y: fullteamY + 110 * Math.sin(Math.PI * personDegree / 180),
+    //     // x: 0,
+    //     // y: 0,
+    //     width: 60,
+    //     height: 60,
+    //     offsetX: 30,
+    //     offsetY: 30,
+    //     // draggable: true,
+    //   });
+
+    //   var textName = new Konva.Text({
+    //     text: 'Person Name',
+    //     x: imageNode.x() + 20,
+    //     y: imageNode.y() - 15,
+    //     fontSize: 10,
+    //     fontStyle: 'bold italic',
+    //   });
+    //   personGroup.add(textName)
+
+    //   var textTitle = new Konva.Text({
+    //     text: 'Title',
+    //     x: imageNode.x() + 20,
+    //     y: imageNode.y() - 3,
+    //     fontSize: 10,
+    //     fontStyle: 'italic',
+    //   });
+    //   personGroup.add(textTitle)
+    //   fullteamGroup.add(personGroup)
+    //   // add cursor styling
+    //   imageNode.on('mouseover', function () {
+    //     document.body.style.cursor = 'pointer';
+    //   });
+    //   imageNode.on('mouseout', function () {
+    //     document.body.style.cursor = 'default';
+    //   });
+
+    //   imageNode.on('mouseover', function () {
+    //     console.log(`${imageNode.x()} x ${imageNode.y()}`);
+    //   });
+
+    //   // add to tranform layer
+    //   // tr.node(imageNode)
+    //   shapesArray.push(imageNode)
+    // });
+
+    var times = 5;
+    for(var i = 0; i < times; i++){
+        personBlob(personDegree);
+        personDegree += 25
+    }
+
+    // add infoButton
+    let fullteaminfoButton = Konva.Image.fromURL(infoButtonSVG, (imageNode) => {
+      // layer.add(imageNode);
+      fullteamGroup.add(imageNode);
+      imageNode.setAttrs({
+        // x = radius * Math.cos(Math.PI * angle / 180);
+        x: fullteamX + 77 * Math.cos(Math.PI * (-35 + 180) / 180),
+        // y = radius * Math.sin(Math.PI * angle / 180);
+        y: fullteamY + 77 * Math.sin(Math.PI * (-35 + 180) / 180),
+        // x: 0,
+        // y: 0,
+        width: 56,
+        height: 56,
+        offsetX: 28,
+        offsetY: 28,
+        // draggable: true,
+      });
+
+      // add cursor styling
+      imageNode.on('mouseover', function () {
+        document.body.style.cursor = 'pointer';
+      });
+      imageNode.on('mouseout', function () {
+        document.body.style.cursor = 'default';
+      });
+
+      imageNode.on('mouseover', function () {
+        console.log(`${imageNode.x()} x ${imageNode.y()}`);
+      });
+
+      // add to tranform layer
+      // tr.node(imageNode)
+      shapesArray.push(imageNode)
+    });
+    fullteaminfoButton
+
+    layer.add(teamGroup)
+    layer.add(fullteamGroup)
 
 
     stage.add(layer)
@@ -83,7 +545,110 @@
       };
       stage.position(newPos);
     });
+
+    // Drag and Select feature
+    var selectionRectangle = new Konva.Rect({
+      fill: 'rgba(0,0,255,0.5)',
+      visible: false,
+    });
+    layer.add(selectionRectangle);
+
+    var x1, y1, x2, y2;
+    stage.on('mousedown touchstart', (e) => {
+      // do nothing if we mousedown on any shape
+      if (e.target !== stage) {
+        return;
+      }
+      e.evt.preventDefault();
+      x1 = stage.getPointerPosition().x;
+      y1 = stage.getPointerPosition().y;
+      x2 = stage.getPointerPosition().x;
+      y2 = stage.getPointerPosition().y;
+
+      selectionRectangle.visible(true);
+      selectionRectangle.width(0);
+      selectionRectangle.height(0);
+    });
+
+    stage.on('mousemove touchmove', (e) => {
+      // do nothing if we didn't start selection
+      if (!selectionRectangle.visible()) {
+        return;
+      }
+      e.evt.preventDefault();
+      x2 = stage.getPointerPosition().x;
+      y2 = stage.getPointerPosition().y;
+
+      selectionRectangle.setAttrs({
+        x: Math.min(x1, x2),
+        y: Math.min(y1, y2),
+        width: Math.abs(x2 - x1),
+        height: Math.abs(y2 - y1),
+      });
+    });
+
+    stage.on('mouseup touchend', (e) => {
+      // do nothing if we didn't start selection
+      if (!selectionRectangle.visible()) {
+        return;
+      }
+      e.evt.preventDefault();
+      // update visibility in timeout, so we can check it in click event
+      setTimeout(() => {
+        selectionRectangle.visible(false);
+      });
+
+      // var shapes = stage.find('.rect');
+      var shapes = shapesArray;
+      var box = selectionRectangle.getClientRect();
+      var selected = shapes.filter((shape) =>
+        Konva.Util.haveIntersection(box, shape.getClientRect())
+      );
+      tr.nodes(selected);
+    });
+
+    // clicks should select/deselect shapes
+    stage.on('click tap', function (e) {
+      // if we are selecting with rect, do nothing
+      if (selectionRectangle.visible()) {
+        return;
+      }
+
+      // if click on empty area - remove all selections
+      if (e.target === stage) {
+        tr.nodes([]);
+        return;
+      }
+
+      // do nothing if clicked NOT on our rectangles
+      // if (!e.target.hasName('rect')) {
+      //   return;
+      // }
+
+      // do we pressed shift or ctrl?
+      const metaPressed = e.evt.shiftKey || e.evt.ctrlKey || e.evt.metaKey;
+      const isSelected = tr.nodes().indexOf(e.target) >= 0;
+
+      if (!metaPressed && !isSelected) {
+        // if no key pressed and the node is not selected
+        // select just one
+        tr.nodes([e.target]);
+      } else if (metaPressed && isSelected) {
+        // if we pressed keys and node was selected
+        // we need to remove it from selection:
+        const nodes = tr.nodes().slice(); // use slice to have new copy of array
+        // remove node from array
+        nodes.splice(nodes.indexOf(e.target), 1);
+        tr.nodes(nodes);
+      } else if (metaPressed && !isSelected) {
+        // add the node into selection
+        const nodes = tr.nodes().concat([e.target]);
+        tr.nodes(nodes);
+      }
+    });
   })
+
+
 
   // function fitStageToCanvas(){
   //   // now we need to fit stage into parent
@@ -106,10 +671,14 @@
   // }
 
   // canvas.addEventListener('resize', fitStageToCanvas())
+  onDestroy(() => {
+		if (stage) {
+			stage.destroy();
+		}
+	});
 </script>
 
 <svelte:window bind:innerWidth bind:outerWidth bind:innerHeight bind:outerHeight />
-
 <div class="drawer">
   <input id="my-drawer" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content">
@@ -130,7 +699,7 @@
         </svg>
       </a> -->
       <li><a href="/">Home</a></li>
-      <li><a>Sidebar Item 2</a></li>
+      <li><a href="/sorting">Sorting Algorithm</a></li>
     </ul>
   </div>
 </div>
