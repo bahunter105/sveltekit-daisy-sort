@@ -5,7 +5,11 @@
   import plusCircleSVG from '$lib/images/plus-circle.svg'
   import createPersonSVG from '$lib/images/Create Person.svg'
   import createTeamSVG from '$lib/images/Create Team.svg'
-  import createtemplateSVG from '$lib/images/Component 11.svg'
+  import teamSVG from '$lib/images/Team Created.svg'
+  import personSVG from '$lib/images/Person Blob.svg'
+  import infoButtonSVG from '$lib/images/i-blob.svg'
+  import orangeAddSVG from '$lib/images/Orange Add.svg'
+  import createtemplateSVG from '$lib/images/Component 9.svg'
 
 
   $: outerWidth = 0
@@ -29,34 +33,6 @@
 
     let layer = new Konva.Layer();
 
-    var circle = new Konva.Circle({
-      x: stage.width() / 2,
-      y: stage.height() / 2,
-      radius: 70,
-      fill: 'red',
-      stroke: 'black',
-      strokeWidth: 4,
-    });
-
-    // add the shape to the layer
-    layer.add(circle);
-
-    var circle2 = new Konva.Circle({
-      // x: stage.width() / 2,
-      // y: stage.height() / 2,
-      // x = radius * Math.cos(Math.PI * angle / 180);
-      x: stage.width() / 2 + (70) * Math.cos(Math.PI * -90 / 180),
-      // y = radius * Math.sin(Math.PI * angle / 180);
-      y: stage.height() / 2 + (70) * Math.sin(Math.PI * -90 / 180),
-      radius: 20,
-      fill: 'red',
-      stroke: 'black',
-      strokeWidth: 4,
-    });
-
-    // add the shape to the layer
-    layer.add(circle2);
-
     // add transform layer
     let tr = new Konva.Transformer();
     layer.add(tr);
@@ -72,10 +48,10 @@
     let plusCircle = Konva.Image.fromURL(plusCircleSVG, (imageNode) => {
       layer.add(imageNode);
       imageNode.setAttrs({
-        // x: stage.width() * 0.07125,
-        // y: stage.height() * 0.02475247525,
-        x: stage.width() / 2,
-        y: stage.height() / 2,
+        x: stage.width() * 0.0825,
+        y: stage.height() * 0.09335219236,
+        // x: stage.width() / 2,
+        // y: stage.height() / 2,
         offsetX:50,
         offsetY: 50,
         width: 100,
@@ -176,14 +152,53 @@
     });
     createTeam
 
-    let createtemplate = Konva.Image.fromURL(createtemplateSVG, (imageNode) => {
-      layer.add(imageNode);
+    // let createtemplate = Konva.Image.fromURL(createtemplateSVG, (imageNode) => {
+    //   layer.add(imageNode);
+    //   imageNode.setAttrs({
+    //     x: stage.width() / 3,
+    //     y: stage.height() / 3,
+    //     width: 200,
+    //     height: 200,
+    //     draggable: true,
+    //   });
+
+    //   // add cursor styling
+    //   imageNode.on('mouseover', function () {
+    //     document.body.style.cursor = 'pointer';
+    //   });
+    //   imageNode.on('mouseout', function () {
+    //     document.body.style.cursor = 'default';
+    //   });
+
+    //   imageNode.on('mouseover', function () {
+    //       console.log(`${imageNode.x()} x ${imageNode.y()}`);
+    //     });
+    // });
+    // createtemplate
+
+    // create group for Team Bubbles
+    let teamGroup = new Konva.Group({
+      draggable: true,
+    })
+    let teamX
+    let teamY
+    // add team
+    let team = Konva.Image.fromURL(teamSVG, (imageNode) => {
+      // layer.add(imageNode);
+      teamGroup.add(imageNode);
+
       imageNode.setAttrs({
-        x: stage.width() / 3,
-        y: stage.height() / 3,
-        width: 200,
+        // // x = radius * Math.cos(Math.PI * angle / 180);
+        // x: plusCircleX + 100 * Math.cos(Math.PI * 0 / 180),
+        // // y = radius * Math.sin(Math.PI * angle / 180);
+        // y: plusCircleY + 100 * Math.sin(Math.PI * 0 / 180),
+        x: stage.width() / 2,
+        y: stage.height() / 2,
+        width: 180,
         height: 180,
-        draggable: true,
+        offsetX: 90,
+        offsetY: 90,
+        // draggable: true,
       });
 
       // add cursor styling
@@ -195,11 +210,90 @@
       });
 
       imageNode.on('mouseover', function () {
-          console.log(`${imageNode.x()} x ${imageNode.y()}`);
-        });
-    });
-    createtemplate
+        console.log(`${imageNode.x()} x ${imageNode.y()}`);
+      });
 
+      teamX = imageNode.x()
+      teamY = imageNode.y()
+      // add to tranform layer
+      // tr.node(imageNode)
+      // shapesArray.push(imageNode)
+    });
+    team
+
+    // add orangeAdd
+    let orangeAdd = Konva.Image.fromURL(orangeAddSVG, (imageNode) => {
+      // layer.add(imageNode);
+      teamGroup.add(imageNode);
+      imageNode.setAttrs({
+        // x = radius * Math.cos(Math.PI * angle / 180);
+        x: teamX + 66 * Math.cos(Math.PI * 35 / 180),
+        // y = radius * Math.sin(Math.PI * angle / 180);
+        y: teamY + 66 * Math.sin(Math.PI * 35 / 180),
+        // x: 0,
+        // y: 0,
+        width: 40,
+        height: 40,
+        offsetX: 20,
+        offsetY: 20,
+        // draggable: true,
+      });
+
+      // add cursor styling
+      imageNode.on('mouseover', function () {
+        document.body.style.cursor = 'pointer';
+      });
+      imageNode.on('mouseout', function () {
+        document.body.style.cursor = 'default';
+      });
+
+      imageNode.on('mouseover', function () {
+        console.log(`${imageNode.x()} x ${imageNode.y()}`);
+      });
+
+      // add to tranform layer
+      // tr.node(imageNode)
+      shapesArray.push(imageNode)
+    });
+    orangeAdd
+
+    // add infoButton
+    let infoButton = Konva.Image.fromURL(infoButtonSVG, (imageNode) => {
+      // layer.add(imageNode);
+      teamGroup.add(imageNode);
+      imageNode.setAttrs({
+        // x = radius * Math.cos(Math.PI * angle / 180);
+        x: teamX + 77 * Math.cos(Math.PI * -35 / 180),
+        // y = radius * Math.sin(Math.PI * angle / 180);
+        y: teamY + 77 * Math.sin(Math.PI * -35 / 180),
+        // x: 0,
+        // y: 0,
+        width: 56,
+        height: 56,
+        offsetX: 28,
+        offsetY: 28,
+        // draggable: true,
+      });
+
+      // add cursor styling
+      imageNode.on('mouseover', function () {
+        document.body.style.cursor = 'pointer';
+      });
+      imageNode.on('mouseout', function () {
+        document.body.style.cursor = 'default';
+      });
+
+      imageNode.on('mouseover', function () {
+        console.log(`${imageNode.x()} x ${imageNode.y()}`);
+      });
+
+      // add to tranform layer
+      // tr.node(imageNode)
+      shapesArray.push(imageNode)
+    });
+    infoButton
+
+    layer.add(teamGroup)
     stage.add(layer)
     // Zoooooooming
     var scaleBy = 1.01;
