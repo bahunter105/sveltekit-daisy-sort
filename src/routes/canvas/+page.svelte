@@ -11,15 +11,6 @@
   import orangeAddSVG from '$lib/images/Orange Add.svg'
   import createtemplateSVG from '$lib/images/Component 10.svg'
 
-
-  $: outerWidth = 0
-	$: innerWidth = 0
-	$: outerHeight = 0
-	$: innerHeight = 0
-
-  // let stageWidth = 100
-  // let stageHeight = 100
-
   let stage
   let layer
   // set an Array of Shapes
@@ -37,85 +28,71 @@
 
     // add transform layer
     let tr = new Konva.Transformer();
-    layer.add(tr);
-
-    // // by default select all shapes
-    // tr.nodes([rect1, rect2]);
+    // layer.add(tr);
 
     // call XY coordinates of plusCircle for later use
-    let plusCircleX
-    let plusCircleY
+    let plusCircleX = stage.width() * 0.0825
+    let plusCircleY = stage.height() * 0.09335219236
 
     // add the plusCircle
-    let plusCircleID
-    Konva.Image.fromURL(plusCircleSVG, (imageNode) => {
-      layer.add(imageNode);
-      imageNode.setAttrs({
-        x: stage.width() * 0.0825,
-        y: stage.height() * 0.09335219236,
+    let plusCirlceImageObj = new Image();
+    plusCirlceImageObj.onload = function () {
+      let plusCircle = new Konva.Image({
+        image:plusCirlceImageObj,
+        x: plusCircleX,
+        y: plusCircleY,
         // x: stage.width() / 2,
         // y: stage.height() / 2,
         offsetX:50,
         offsetY: 50,
         width: 100,
         height: 100,
-        draggable: true,
+        // draggable: true,
+        id: 'plusCircle'
       });
+
+      // add the shape to the layer
+      layer.add(plusCircle);
+
+      plusCircle.on('click', function () {
+        let createPerson = stage.findOne("#createPerson")
+        let createTeam = stage.findOne("#createTeam")
+        if (createPerson.visible() === true) {
+          createPerson.hide()
+          createTeam.hide()
+        } else {
+          createPerson.show()
+          createTeam.show()
+        }
+      })
 
       // add cursor styling
-      imageNode.on('mouseover', function () {
+      plusCircle.on('mouseover', function () {
         document.body.style.cursor = 'pointer';
       });
-      imageNode.on('mouseout', function () {
+      plusCircle.on('mouseout', function () {
         document.body.style.cursor = 'default';
       });
-
-      plusCircleX = imageNode.x()
-      plusCircleY = imageNode.y()
-
-      imageNode.on('mouseover', function () {
-        console.log(`${imageNode.x()} x ${imageNode.y()}`);
-        console.log(`${plusCircleX} x ${plusCircleY}`);
-      });
-
-      imageNode.on('click', function () {
-        console.log("Clicked");
-        console.log(`${plusCircleX} x ${plusCircleY}`);
-      });
-
-      // add to tranform layer
-      // tr.node(imageNode)
-
-      // layer.draw()
-      console.log(imageNode['_id'])
-      shapesArray.push(imageNode)
-      plusCircleID = imageNode['_id']
-      console.log(imageNode['_id'])
-      shapesArray.push(imageNode)
-    });
-
-
-    let plusCircle = shapesArray.find(element => element._id === plusCircleID)
-    console.log(plusCircle)
+    };
+    plusCirlceImageObj.src = plusCircleSVG
 
     // add createPerson
-    let createPersonID
     Konva.Image.fromURL(createPersonSVG, (imageNode) => {
       layer.add(imageNode);
       imageNode.setAttrs({
         // x = radius * Math.cos(Math.PI * angle / 180);
-        x: plusCircleX + 100 * Math.cos(Math.PI * 0 / 180),
+        x: plusCircleX + 100 * Math.cos(Math.PI * 60 / 180),
         // y = radius * Math.sin(Math.PI * angle / 180);
-        y: plusCircleY + 100 * Math.sin(Math.PI * 0 / 180),
+        y: plusCircleY + 100 * Math.sin(Math.PI * 60 / 180),
         // x: 0,
         // y: 0,
         width: 66,
         height: 66,
         offsetX: 33,
         offsetY: 33,
-        draggable: true,
+        // draggable: true,
         visible: false,
-        id:"3",
+        id:"createPerson",
       });
 
       // add cursor styling
@@ -126,22 +103,10 @@
         document.body.style.cursor = 'default';
       });
 
-      imageNode.on('mouseover', function () {
-        console.log(`${imageNode.x()} x ${imageNode.y()}`);
-      });
-
-      // add to tranform layer
-      // tr.node(imageNode)
-
-      createPersonID = imageNode['_id']
-      console.log(imageNode['_id'])
       shapesArray.push(imageNode)
     });
 
-    let createPerson = shapesArray.find(element => element._id === createPersonID)
-
     // add createTeam
-    let createTeamID
     Konva.Image.fromURL(createTeamSVG, (imageNode) => {
       layer.add(imageNode);
       imageNode.setAttrs({
@@ -155,9 +120,9 @@
         height: 66,
         offsetX: 33,
         offsetY: 33,
-        draggable: true,
+        // draggable: true,
         visible: false,
-        id:"3",
+        id:"createTeam",
       });
 
       // add cursor styling
@@ -168,36 +133,8 @@
         document.body.style.cursor = 'default';
       });
 
-      imageNode.on('mouseover', function () {
-        console.log(`${imageNode.x()} x ${imageNode.y()}`);
-      });
-
-      // add to tranform layer
-      // tr.node(imageNode)
-
-      createTeamID = imageNode['_id']
-      console.log(imageNode['_id'])
       shapesArray.push(imageNode)
     });
-
-    let createTeam = shapesArray.find(element => element._id === createTeamID)
-
-
-    // add show/noshow toggle to plusCircle
-    // plusCircle.on('click', function () {
-    //   console.log('clicked')
-    //   if (createPerson.visible() === true) {
-    //     createPerson.hide()
-    //     createTeam.hide()
-    //   } else {
-    //     createPerson.show()
-    //     createTeam.show()
-    //   }
-    // })
-
-
-
-
 
 
     // let createtemplate = Konva.Image.fromURL(createtemplateSVG, (imageNode) => {
@@ -693,11 +630,11 @@
         tr.nodes(nodes);
       }
     });
-
-    console.log(stage)
-    console.log(layer)
-    console.log(shapesArray)
+    // debugger
   })
+  // console.log(stage)
+  // console.log(layer)
+  // console.log(shapesArray)
 
 
 
@@ -729,7 +666,6 @@
 	});
 </script>
 
-<svelte:window bind:innerWidth bind:outerWidth bind:innerHeight bind:outerHeight />
 <div class="drawer">
   <input id="my-drawer" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content">
@@ -753,3 +689,4 @@
     </ul>
   </div>
 </div>
+<p>hi</p>
