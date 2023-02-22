@@ -32,6 +32,7 @@
     });
 
     let layer = new Konva.Layer();
+    stage.add(layer)
 
     // add transform layer
     let tr = new Konva.Transformer();
@@ -45,8 +46,9 @@
     let plusCircleY
 
     // add the plusCircle
-    let plusCircle = Konva.Image.fromURL(plusCircleSVG, (imageNode) => {
-      layer.add(imageNode);
+    let plusCircle
+    Konva.Image.fromURL(plusCircleSVG, (imageNode) => {
+      // layer.add(imageNode);
       imageNode.setAttrs({
         x: stage.width() * 0.0825,
         y: stage.height() * 0.09335219236,
@@ -78,12 +80,18 @@
       // add to tranform layer
       // tr.node(imageNode)
 
-      shapesArray.push(imageNode)
+      plusCircle = imageNode
+      layer.add(plusCircle);
+      // layer.draw()
+      console.log(plusCircle)
+      console.log(imageNode['_id'])
+      shapesArray.push(plusCircle)
     });
-    plusCircle
+
 
     // add createPerson
-    let createPerson = Konva.Image.fromURL(createPersonSVG, (imageNode) => {
+    let createPerson
+    Konva.Image.fromURL(createPersonSVG, (imageNode) => {
       layer.add(imageNode);
       imageNode.setAttrs({
         // x = radius * Math.cos(Math.PI * angle / 180);
@@ -97,6 +105,7 @@
         offsetX: 33,
         offsetY: 33,
         draggable: true,
+        visible: false,
       });
 
       // add cursor styling
@@ -113,12 +122,13 @@
 
       // add to tranform layer
       // tr.node(imageNode)
-      shapesArray.push(imageNode)
+      createPerson = imageNode
+      shapesArray.push(createPerson)
     });
-    createPerson
 
     // add createTeam
-    let createTeam = Konva.Image.fromURL(createTeamSVG, (imageNode) => {
+    let createTeam
+    Konva.Image.fromURL(createTeamSVG, (imageNode) => {
       layer.add(imageNode);
       imageNode.setAttrs({
         // x = radius * Math.cos(Math.PI * angle / 180);
@@ -132,6 +142,7 @@
         offsetX: 33,
         offsetY: 33,
         draggable: true,
+        visible: false,
       });
 
       // add cursor styling
@@ -148,9 +159,20 @@
 
       // add to tranform layer
       // tr.node(imageNode)
-      shapesArray.push(imageNode)
+      createTeam = imageNode
+      shapesArray.push(createTeam)
     });
-    createTeam
+
+    // add show/noshow toggle to plusCircle
+    // plusCircle.on('click', function () {
+    //   if (createPerson.visible() === true) {
+    //     createPerson.hide()
+    //     createTeam.hide()
+    //   } else {
+    //     createPerson.show()
+    //     createTeam.show()
+    //   }
+    // })
 
     // let createtemplate = Konva.Image.fromURL(createtemplateSVG, (imageNode) => {
     //   layer.add(imageNode);
@@ -511,7 +533,6 @@
     layer.add(fullteamGroup)
 
 
-    stage.add(layer)
     // Zoooooooming
     var scaleBy = 1.01;
     stage.on('wheel', (e) => {
