@@ -21,6 +21,7 @@
   // let stageHeight = 100
 
   let stage
+  let layer
   // set an Array of Shapes
   let shapesArray = []
 
@@ -31,7 +32,7 @@
       height: innerHeight,
     });
 
-    let layer = new Konva.Layer();
+    layer = new Konva.Layer();
     stage.add(layer)
 
     // add transform layer
@@ -46,9 +47,9 @@
     let plusCircleY
 
     // add the plusCircle
-    let plusCircle
+    let plusCircleID
     Konva.Image.fromURL(plusCircleSVG, (imageNode) => {
-      // layer.add(imageNode);
+      layer.add(imageNode);
       imageNode.setAttrs({
         x: stage.width() * 0.0825,
         y: stage.height() * 0.09335219236,
@@ -77,27 +78,35 @@
         console.log(`${plusCircleX} x ${plusCircleY}`);
       });
 
+      imageNode.on('click', function () {
+        console.log("Clicked");
+        console.log(`${plusCircleX} x ${plusCircleY}`);
+      });
+
       // add to tranform layer
       // tr.node(imageNode)
 
-      plusCircle = imageNode
-      layer.add(plusCircle);
       // layer.draw()
-      console.log(plusCircle)
       console.log(imageNode['_id'])
-      shapesArray.push(plusCircle)
+      shapesArray.push(imageNode)
+      plusCircleID = imageNode['_id']
+      console.log(imageNode['_id'])
+      shapesArray.push(imageNode)
     });
 
 
+    let plusCircle = shapesArray.find(element => element._id === plusCircleID)
+    console.log(plusCircle)
+
     // add createPerson
-    let createPerson
+    let createPersonID
     Konva.Image.fromURL(createPersonSVG, (imageNode) => {
       layer.add(imageNode);
       imageNode.setAttrs({
         // x = radius * Math.cos(Math.PI * angle / 180);
-        x: plusCircleX + 100 * Math.cos(Math.PI * 60 / 180),
+        x: plusCircleX + 100 * Math.cos(Math.PI * 0 / 180),
         // y = radius * Math.sin(Math.PI * angle / 180);
-        y: plusCircleY + 100 * Math.sin(Math.PI * 60 / 180),
+        y: plusCircleY + 100 * Math.sin(Math.PI * 0 / 180),
         // x: 0,
         // y: 0,
         width: 66,
@@ -106,6 +115,7 @@
         offsetY: 33,
         draggable: true,
         visible: false,
+        id:"3",
       });
 
       // add cursor styling
@@ -122,12 +132,16 @@
 
       // add to tranform layer
       // tr.node(imageNode)
-      createPerson = imageNode
-      shapesArray.push(createPerson)
+
+      createPersonID = imageNode['_id']
+      console.log(imageNode['_id'])
+      shapesArray.push(imageNode)
     });
 
+    let createPerson = shapesArray.find(element => element._id === createPersonID)
+
     // add createTeam
-    let createTeam
+    let createTeamID
     Konva.Image.fromURL(createTeamSVG, (imageNode) => {
       layer.add(imageNode);
       imageNode.setAttrs({
@@ -143,6 +157,7 @@
         offsetY: 33,
         draggable: true,
         visible: false,
+        id:"3",
       });
 
       // add cursor styling
@@ -159,12 +174,18 @@
 
       // add to tranform layer
       // tr.node(imageNode)
-      createTeam = imageNode
-      shapesArray.push(createTeam)
+
+      createTeamID = imageNode['_id']
+      console.log(imageNode['_id'])
+      shapesArray.push(imageNode)
     });
+
+    let createTeam = shapesArray.find(element => element._id === createTeamID)
+
 
     // add show/noshow toggle to plusCircle
     // plusCircle.on('click', function () {
+    //   console.log('clicked')
     //   if (createPerson.visible() === true) {
     //     createPerson.hide()
     //     createTeam.hide()
@@ -173,6 +194,11 @@
     //     createTeam.show()
     //   }
     // })
+
+
+
+
+
 
     // let createtemplate = Konva.Image.fromURL(createtemplateSVG, (imageNode) => {
     //   layer.add(imageNode);
@@ -667,6 +693,10 @@
         tr.nodes(nodes);
       }
     });
+
+    console.log(stage)
+    console.log(layer)
+    console.log(shapesArray)
   })
 
 
@@ -708,7 +738,6 @@
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
     </label>
     <div id="canvas"></div>
-
   </div>
   <div class="drawer-side">
     <label for="my-drawer" class="drawer-overlay"></label>
