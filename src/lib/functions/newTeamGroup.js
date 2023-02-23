@@ -3,14 +3,38 @@
   import infoButtonSVG from '$lib/images/i-blob.svg'
   import orangeAddSVG from '$lib/images/Orange Add.svg'
 
-function addNewTeamGroup(stage, layer) {
+function getAngleXYCordinates(originX, originY, radius, numberOfSiblings) {
+  // let newRadius = radius + 250*(Math.ceil(((numberOfSiblings+1)-1)/3))
+
+  let angle
+  switch((numberOfSiblings+1) % 3) {
+    case 0:
+      angle = 85
+      break;
+    case 1:
+      angle = 5
+      break;
+    case 2:
+      angle = 45
+      break;
+  };
+
+  let x = originX + radius * Math.cos(Math.PI * angle / 180)
+  let y = originY + radius * Math.sin(Math.PI * angle / 180)
+
+  return {x:x, y:y}
+}
+
+
+
+function addNewTeamGroup(stage, layer, coordinates) {
       // add newTeamGroup
     let newTeamGroup = new Konva.Group({
       draggable: true,
     })
     layer.add(newTeamGroup)
-    let newTeamX = stage.width() / 1.3
-    let newTeamY = stage.height() / 5
+    let newTeamX = coordinates.x
+    let newTeamY = coordinates.y
 
     // add newTeamGroup
     let newTeamImageObj = new Image();
@@ -23,6 +47,7 @@ function addNewTeamGroup(stage, layer) {
         height: 180,
         offsetX: 90,
         offsetY: 90,
+        id: "teamGroup"
       });
 
       // add the shape to the layer
@@ -141,4 +166,4 @@ function addNewTeamGroup(stage, layer) {
     newTeamOrangeAddImageObj.src = orangeAddSVG
 }
 
-export default addNewTeamGroup;
+export {addNewTeamGroup, getAngleXYCordinates}

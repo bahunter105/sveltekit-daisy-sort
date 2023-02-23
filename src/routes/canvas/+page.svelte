@@ -10,7 +10,7 @@
   import infoButtonSVG from '$lib/images/i-blob.svg'
   import orangeAddSVG from '$lib/images/Orange Add.svg'
   import createtemplateSVG from '$lib/images/Component 10.svg'
-  import addNewTeamGroup from '$lib/functions/newTeamGroup.js'
+  import {addNewTeamGroup, getAngleXYCordinates} from '$lib/functions/newTeamGroup.js'
 
   let stage
   let layer
@@ -136,7 +136,11 @@
 
       // add addNewTeamGroup function
       imageNode.on('pointerdown', function () {
-        addNewTeamGroup(stage, layer)
+        let numberOfSiblings = stage.find('#teamGroup').length
+        if (numberOfSiblings <= 2) {
+          let coordinates = getAngleXYCordinates(plusCircleX, plusCircleY, 375, numberOfSiblings)
+          addNewTeamGroup(stage, layer, coordinates)
+        }
         let createPerson = stage.findOne("#createPerson")
         let createTeam = stage.findOne("#createTeam")
         if (createPerson.visible() === true) {
@@ -151,7 +155,19 @@
       shapesArray.push(imageNode)
     });
 
+    let newTeamOrbitCircle = new Konva.Circle({
+      x: plusCircleX,
+      y: plusCircleY,
+      radius: 375,
+      offsetX: 0,
+      offsetY: 0,
+      fill: 'rgba(0,0,255,0)',
+      stroke: 'rgb(255, 168, 0, 0.5)',
+      strokeWidth: 1,
+      dash: [1,1]
+    });
 
+    layer.add(newTeamOrbitCircle)
     // let createtemplate = Konva.Image.fromURL(createtemplateSVG, (imageNode) => {
     //   layer.add(imageNode);
     //   imageNode.setAttrs({
