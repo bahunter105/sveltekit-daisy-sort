@@ -54,7 +54,7 @@
       // add the shape to the layer
       layer.add(plusCircle);
 
-      plusCircle.on('click', function () {
+      plusCircle.on('pointerdown', function () {
         let createPerson = stage.findOne("#createPerson")
         let createTeam = stage.findOne("#createTeam")
         if (createPerson.visible() === true) {
