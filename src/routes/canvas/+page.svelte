@@ -10,6 +10,7 @@
   import infoButtonSVG from '$lib/images/i-blob.svg'
   import orangeAddSVG from '$lib/images/Orange Add.svg'
   import createtemplateSVG from '$lib/images/Component 10.svg'
+  import addNewTeamGroup from '$lib/functions/newTeamGroup.js'
 
   let stage
   let layer
@@ -133,6 +134,20 @@
         document.body.style.cursor = 'default';
       });
 
+      // add addNewTeamGroup function
+      imageNode.on('pointerdown', function () {
+        addNewTeamGroup(stage, layer)
+        let createPerson = stage.findOne("#createPerson")
+        let createTeam = stage.findOne("#createTeam")
+        if (createPerson.visible() === true) {
+          createPerson.hide()
+          createTeam.hide()
+        } else {
+          createPerson.show()
+          createTeam.show()
+        }
+      })
+
       shapesArray.push(imageNode)
     });
 
@@ -160,212 +175,6 @@
     //     });
     // });
     // createtemplate
-
-    // add newTeam
-    let newTeamGroup = new Konva.Group({
-      draggable: true,
-    })
-    layer.add(newTeamGroup)
-    let newTeamX = stage.width() / 1.3
-    let newTeamY = stage.height() / 5
-
-    let newTeamImageObj = new Image();
-    newTeamImageObj.onload = function () {
-      let newTeam = new Konva.Image({
-        image:newTeamImageObj,
-        x: newTeamX,
-        y: newTeamY,
-        width: 180,
-        height: 180,
-        offsetX: 90,
-        offsetY: 90,
-      });
-
-      // add the shape to the layer
-      newTeamGroup.add(newTeam)
-
-      // add other functions
-      // newTeam.on('pointerdown', function () {
-      //   let createPerson = stage.findOne("#createPerson")
-      //   let createTeam = stage.findOne("#createTeam")
-      //   if (createPerson.visible() === true) {
-      //     createPerson.hide()
-      //     createTeam.hide()
-      //   } else {
-      //     createPerson.show()
-      //     createTeam.show()
-      //   }
-      // })
-
-      // add cursor styling
-      newTeam.on('mouseover', function () {
-        document.body.style.cursor = 'pointer';
-      });
-      newTeam.on('mouseout', function () {
-        document.body.style.cursor = 'default';
-      });
-    };
-    newTeamImageObj.src = teamSVG
-
-    // add infoButton
-    let newTeamInfoButtonImageObj = new Image();
-    newTeamInfoButtonImageObj.onload = function () {
-      let newTeamInfoButton = new Konva.Image({
-        image:newTeamInfoButtonImageObj,
-        // x = radius * Math.cos(Math.PI * angle / 180);
-        x: newTeamX + 77 * Math.cos(Math.PI * (-35 + 180) / 180),
-        // y = radius * Math.sin(Math.PI * angle / 180);
-        y: newTeamY + 77 * Math.sin(Math.PI * (-35 + 180) / 180),
-        // x: 0,
-        // y: 0,
-        width: 56,
-        height: 56,
-        offsetX: 28,
-        offsetY: 28,
-        // draggable: true,
-      });
-
-      // add the shape to the layer
-      newTeamGroup.add(newTeamInfoButton)
-
-      // add other functions
-      // newTeamInfoButton.on('pointerdown', function () {
-      //   let createPerson = stage.findOne("#createPerson")
-      //   let createTeam = stage.findOne("#createTeam")
-      //   if (createPerson.visible() === true) {
-      //     createPerson.hide()
-      //     createTeam.hide()
-      //   } else {
-      //     createPerson.show()
-      //     createTeam.show()
-      //   }
-      // })
-
-      // add cursor styling
-      newTeamInfoButton.on('mouseover', function () {
-        document.body.style.cursor = 'pointer';
-      });
-      newTeamInfoButton.on('mouseout', function () {
-        document.body.style.cursor = 'default';
-      });
-    };
-    newTeamInfoButtonImageObj.src = infoButtonSVG
-
-    // create group for Team Bubbles
-    let teamGroup = new Konva.Group({
-      draggable: true,
-    })
-    let teamX
-    let teamY
-    // add team
-    let team = Konva.Image.fromURL(teamSVG, (imageNode) => {
-      // layer.add(imageNode);
-      teamGroup.add(imageNode);
-
-      imageNode.setAttrs({
-        x: stage.width() / 1.3,
-        y: stage.height() / 5,
-        width: 180,
-        height: 180,
-        offsetX: 90,
-        offsetY: 90,
-        // draggable: true,
-      });
-
-      // add cursor styling
-      imageNode.on('mouseover', function () {
-        document.body.style.cursor = 'pointer';
-      });
-      imageNode.on('mouseout', function () {
-        document.body.style.cursor = 'default';
-      });
-
-      imageNode.on('mouseover', function () {
-        console.log(`${imageNode.x()} x ${imageNode.y()}`);
-      });
-
-      teamX = imageNode.x()
-      teamY = imageNode.y()
-      // add to tranform layer
-      // tr.node(imageNode)
-      // shapesArray.push(imageNode)
-    });
-    team
-
-    // add orangeAdd
-    let orangeAdd = Konva.Image.fromURL(orangeAddSVG, (imageNode) => {
-      // layer.add(imageNode);
-      teamGroup.add(imageNode);
-      imageNode.setAttrs({
-        // x = radius * Math.cos(Math.PI * angle / 180);
-        x: teamX + 66 * Math.cos(Math.PI * 35 / 180),
-        // y = radius * Math.sin(Math.PI * angle / 180);
-        y: teamY + 66 * Math.sin(Math.PI * 35 / 180),
-        // x: 0,
-        // y: 0,
-        width: 40,
-        height: 40,
-        offsetX: 20,
-        offsetY: 20,
-        // draggable: true,
-      });
-
-      // add cursor styling
-      imageNode.on('mouseover', function () {
-        document.body.style.cursor = 'pointer';
-      });
-      imageNode.on('mouseout', function () {
-        document.body.style.cursor = 'default';
-      });
-
-      imageNode.on('mouseover', function () {
-        console.log(`${imageNode.x()} x ${imageNode.y()}`);
-      });
-
-      // add to tranform layer
-      // tr.node(imageNode)
-      shapesArray.push(imageNode)
-    });
-    orangeAdd
-
-    // add infoButton
-    let infoButton = Konva.Image.fromURL(infoButtonSVG, (imageNode) => {
-      // layer.add(imageNode);
-      teamGroup.add(imageNode);
-      imageNode.setAttrs({
-        // x = radius * Math.cos(Math.PI * angle / 180);
-        x: teamX + 77 * Math.cos(Math.PI * -35 / 180),
-        // y = radius * Math.sin(Math.PI * angle / 180);
-        y: teamY + 77 * Math.sin(Math.PI * -35 / 180),
-        // x: 0,
-        // y: 0,
-        width: 56,
-        height: 56,
-        offsetX: 28,
-        offsetY: 28,
-        // draggable: true,
-      });
-
-      // add cursor styling
-      imageNode.on('mouseover', function () {
-        document.body.style.cursor = 'pointer';
-      });
-      imageNode.on('mouseout', function () {
-        document.body.style.cursor = 'default';
-      });
-
-      imageNode.on('mouseover', function () {
-        console.log(`${imageNode.x()} x ${imageNode.y()}`);
-      });
-
-      // add to tranform layer
-      // tr.node(imageNode)
-      shapesArray.push(imageNode)
-    });
-    infoButton
-
-    layer.add(teamGroup)
-
 
     // create group for Full Team Bubbles
     let fullteamGroup = new Konva.Group({
@@ -580,7 +389,6 @@
     });
     fullteaminfoButton
 
-    layer.add(teamGroup)
     layer.add(fullteamGroup)
 
 
