@@ -10,7 +10,8 @@
   import infoButtonSVG from '$lib/images/i-blob.svg'
   import orangeAddSVG from '$lib/images/Orange Add.svg'
   import createtemplateSVG from '$lib/images/Component 10.svg'
-  import {addNewTeamGroup, getAngleXYCordinates} from '$lib/functions/newTeamGroup.js'
+  import {addNewTeamGroup, getAngleXYCordinates, addNewPerson} from '$lib/functions/newTeamGroup.js'
+  import * as data from '$lib/data/startingData.json'
 
   let stage
   let layer
@@ -139,7 +140,7 @@
         let numberOfSiblings = stage.find('#teamGroup').length
         if (numberOfSiblings <= 2) {
           let coordinates = getAngleXYCordinates(plusCircleX, plusCircleY, 375, numberOfSiblings)
-          addNewTeamGroup(stage, layer, coordinates)
+          addNewTeamGroup(layer, coordinates)
         }
         let createPerson = stage.findOne("#createPerson")
         let createTeam = stage.findOne("#createTeam")
@@ -168,28 +169,49 @@
     });
 
     layer.add(newTeamOrbitCircle)
+
+    // add teams & people via data
+    let teams = data.teams
+    // let numberOfTeamSiblings = teams.length
+    teams.forEach((teamData, index) => {
+        if (index <= 2) {
+          let coordinates = getAngleXYCordinates(plusCircleX, plusCircleY, 375, index)
+          let teamGroup = addNewTeamGroup(layer, coordinates, teamData)
+          // debugger
+          // let numberOfTeamPeople = teamData.people.length
+          teamData.people.forEach((personData, personIndex) => {
+            if (index <= 4) {
+              let personCoordinates = getAngleXYCordinates(coordinates.x, coordinates.y, 110, personIndex, true)
+              addNewPerson(teamGroup, personCoordinates, personData)
+            }
+          })
+        }
+
+
+    });
+
     // let createtemplate = Konva.Image.fromURL(createtemplateSVG, (imageNode) => {
-    //   layer.add(imageNode);
-    //   imageNode.setAttrs({
-    //     x: 350,
-    //     y: 0,
-    //     width: 300,
-    //     height: 250,
-    //     draggable: true,
-    //   });
+      //   layer.add(imageNode);
+      //   imageNode.setAttrs({
+      //     x: 350,
+      //     y: 0,
+      //     width: 300,
+      //     height: 250,
+      //     draggable: true,
+      //   });
 
-    //   // add cursor styling
-    //   imageNode.on('mouseover', function () {
-    //     document.body.style.cursor = 'pointer';
-    //   });
-    //   imageNode.on('mouseout', function () {
-    //     document.body.style.cursor = 'default';
-    //   });
+      //   // add cursor styling
+      //   imageNode.on('mouseover', function () {
+      //     document.body.style.cursor = 'pointer';
+      //   });
+      //   imageNode.on('mouseout', function () {
+      //     document.body.style.cursor = 'default';
+      //   });
 
-    //   imageNode.on('mouseover', function () {
-    //       console.log(`${imageNode.x()} x ${imageNode.y()}`);
-    //     });
-    // });
+      //   imageNode.on('mouseover', function () {
+      //       console.log(`${imageNode.x()} x ${imageNode.y()}`);
+      //     });
+      // });
     // createtemplate
 
     // Zoooooooming
