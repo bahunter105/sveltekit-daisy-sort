@@ -11,8 +11,7 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     <ul class="${"menu p-4 w-80 bg-base-100 text-base-content"}">
       
       <li><a href="${"/"}">Home</a></li>
-      <li><a href="${"/sorting"}">Sorting Algorithm</a></li></ul></div></div>
-<p>hi</p>`;
+      <li><a href="${"/sorting"}">Sorting Algorithm</a></li></ul></div></div>`;
 });
 export {
   Page as default
