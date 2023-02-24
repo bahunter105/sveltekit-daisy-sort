@@ -31,7 +31,7 @@ function getAngleXYCordinates(originX, originY, radius, numberOfSiblings,person 
   return {x:x, y:y}
 }
 
-function addNewTeamGroup(stage, layer, coordinates) {
+function addNewTeamGroup(layer, coordinates, data = {'name': 'Name'}) {
     // add newTeamGroup
     let newTeamGroup = new Konva.Group({
       draggable: true,
@@ -40,7 +40,7 @@ function addNewTeamGroup(stage, layer, coordinates) {
     let newTeamX = coordinates.x
     let newTeamY = coordinates.y
 
-    // add newTeamGroup
+    // add newTeamCircle
     let newTeamImageObj = new Image();
     newTeamImageObj.onload = function () {
       let newTeam = new Konva.Image({
@@ -80,6 +80,26 @@ function addNewTeamGroup(stage, layer, coordinates) {
       });
     };
     newTeamImageObj.src = teamSVG
+
+    // add newTeamName
+    let newTeamName = new Konva.Text({
+      text: data.name,
+      width: 180,
+      x: coordinates.x - 90,
+      y: coordinates.y + 12,
+      fontSize: 15,
+      fontStyle: 'bold',
+      align: 'center',
+      fill: 'white',
+    });
+    // add cursor styling
+    newTeamName.on('mouseover', function () {
+      document.body.style.cursor = 'pointer';
+    });
+    newTeamName.on('mouseout', function () {
+      document.body.style.cursor = 'default';
+    });
+    newTeamGroup.add(newTeamName)
 
     // add infoButton
     let newTeamInfoButtonImageObj = new Image();
@@ -182,9 +202,11 @@ function addNewTeamGroup(stage, layer, coordinates) {
       })
     };
     newTeamOrangeAddImageObj.src = orangeAddSVG
+
+    return newTeamGroup
 }
 
-function addNewPerson(group, coordinates) {
+function addNewPerson(group, coordinates, data = {'name': 'Person Name', 'title': 'title'}) {
     // add newPersonGroup
     let personGroup = new Konva.Group({
       draggable: true,
@@ -209,7 +231,7 @@ function addNewPerson(group, coordinates) {
       personGroup.add(newPerson)
 
       let textName = new Konva.Text({
-          text: 'Person Name',
+          text: data.name,
           x: coordinates.x + 20,
           y: coordinates.y - 15,
           fontSize: 10,
@@ -218,7 +240,7 @@ function addNewPerson(group, coordinates) {
         personGroup.add(textName)
 
         let textTitle = new Konva.Text({
-          text: 'Title',
+          text: data.title,
           x: coordinates.x + 20,
           y: coordinates.y - 3,
           fontSize: 10,
@@ -251,4 +273,4 @@ function addNewPerson(group, coordinates) {
 }
 
 
-export {addNewTeamGroup, getAngleXYCordinates}
+export {addNewTeamGroup, getAngleXYCordinates, addNewPerson}
