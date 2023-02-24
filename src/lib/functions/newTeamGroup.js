@@ -2,11 +2,15 @@
   import teamSVG from '$lib/images/Team Created.svg'
   import infoButtonSVG from '$lib/images/i-blob.svg'
   import orangeAddSVG from '$lib/images/Orange Add.svg'
+  import newPersonSVG from '$lib/images/Person Blob.svg'
 
-function getAngleXYCordinates(originX, originY, radius, numberOfSiblings) {
+function getAngleXYCordinates(originX, originY, radius, numberOfSiblings,person = false) {
   // let newRadius = radius + 250*(Math.ceil(((numberOfSiblings+1)-1)/3))
 
   let angle
+  if(person===true){
+    angle = -45 + (numberOfSiblings*25)
+  }else{
   switch((numberOfSiblings+1) % 3) {
     case 0:
       angle = 85
@@ -18,6 +22,8 @@ function getAngleXYCordinates(originX, originY, radius, numberOfSiblings) {
       angle = 45
       break;
   };
+  }
+
 
   let x = originX + radius * Math.cos(Math.PI * angle / 180)
   let y = originY + radius * Math.sin(Math.PI * angle / 180)
@@ -25,10 +31,8 @@ function getAngleXYCordinates(originX, originY, radius, numberOfSiblings) {
   return {x:x, y:y}
 }
 
-
-
 function addNewTeamGroup(stage, layer, coordinates) {
-      // add newTeamGroup
+    // add newTeamGroup
     let newTeamGroup = new Konva.Group({
       draggable: true,
     })
@@ -142,8 +146,88 @@ function addNewTeamGroup(stage, layer, coordinates) {
       // add the shape to the layer
       newTeamGroup.add(newTeamOrangeAdd)
       newTeamOrangeAdd.zIndex(2)
+
+      // add cursor styling
+      newTeamOrangeAdd.on('mouseover', function () {
+        document.body.style.cursor = 'pointer';
+      });
+      newTeamOrangeAdd.on('mouseout', function () {
+        document.body.style.cursor = 'default';
+      });
+
       // add other functions
-      // newTeamOrangeAdd.on('pointerdown', function () {
+      newTeamOrangeAdd.on('pointerdown', function () {
+        // add Orbit
+        if(this.parent.find("Circle")[0] == undefined){
+          let orbitCircle = new Konva.Circle({
+            x: newTeamX,
+            y: newTeamY,
+            radius: 110,
+            offsetX: 3,
+            offsetY: 3,
+            fill: 'rgba(0,0,255,0)',
+            stroke: 'rgb(255, 168, 0, 0.5)',
+            strokeWidth: 1,
+            dash: [1,1],
+          });
+          newTeamGroup.add(orbitCircle);
+          orbitCircle.zIndex(0)
+        }
+
+        let numberOfPeople = this.parent.find('#person').length
+        if (numberOfPeople <= 4) {
+          let coordinates = getAngleXYCordinates(newTeamX, newTeamY, 110, numberOfPeople, true)
+          addNewPerson(newTeamGroup, coordinates)
+        }
+      })
+    };
+    newTeamOrangeAddImageObj.src = orangeAddSVG
+}
+
+function addNewPerson(group, coordinates) {
+    // add newPersonGroup
+    let personGroup = new Konva.Group({
+      draggable: true,
+    })
+
+    group.add(personGroup)
+
+    let newPersonImageObj = new Image();
+    newPersonImageObj.onload = function () {
+      let newPerson = new Konva.Image({
+        image:newPersonImageObj,
+        x: coordinates.x,
+        y: coordinates.y,
+        width: 60,
+        height: 60,
+        offsetX: 30,
+        offsetY: 30,
+        id: "person",
+        draggable: false,
+      });
+
+      personGroup.add(newPerson)
+
+      let textName = new Konva.Text({
+          text: 'Person Name',
+          x: coordinates.x + 20,
+          y: coordinates.y - 15,
+          fontSize: 10,
+          fontStyle: 'bold italic',
+        });
+        personGroup.add(textName)
+
+        let textTitle = new Konva.Text({
+          text: 'Title',
+          x: coordinates.x + 20,
+          y: coordinates.y - 3,
+          fontSize: 10,
+          fontStyle: 'italic',
+        });
+        personGroup.add(textTitle)
+
+      // add other functions
+      // newPerson.on('pointerdown', function () {
       //   let createPerson = stage.findOne("#createPerson")
       //   let createTeam = stage.findOne("#createTeam")
       //   if (createPerson.visible() === true) {
@@ -156,14 +240,15 @@ function addNewTeamGroup(stage, layer, coordinates) {
       // })
 
       // add cursor styling
-      newTeamOrangeAdd.on('mouseover', function () {
+      newPerson.on('mouseover', function () {
         document.body.style.cursor = 'pointer';
       });
-      newTeamOrangeAdd.on('mouseout', function () {
+      newPerson.on('mouseout', function () {
         document.body.style.cursor = 'default';
       });
     };
-    newTeamOrangeAddImageObj.src = orangeAddSVG
+    newPersonImageObj.src = newPersonSVG
 }
+
 
 export {addNewTeamGroup, getAngleXYCordinates}
