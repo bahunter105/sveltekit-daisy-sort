@@ -11,7 +11,10 @@
   import orangeAddSVG from '$lib/images/Orange Add.svg'
   import createtemplateSVG from '$lib/images/Component 10.svg'
   import {addNewTeamGroup, getAngleXYCordinates, addNewPerson} from '$lib/functions/newTeamGroup.js'
-  import * as data from '$lib/data/startingData.json'
+  import * as jsonData from '$lib/data/startingData.json'
+  import Modal from '$lib/Modal.svelte'
+  /** @type {import('./$types').ActionData} */
+  export let form;
 
   let stage
   let layer
@@ -105,6 +108,19 @@
         document.body.style.cursor = 'default';
       });
 
+      imageNode.on('pointerdown', function () {
+        document.querySelector("#my-modal-3").checked = true
+        let createPerson = stage.findOne("#createPerson")
+        let createTeam = stage.findOne("#createTeam")
+        if (createPerson.visible() === true) {
+          createPerson.hide()
+          createTeam.hide()
+        } else {
+          createPerson.show()
+          createTeam.show()
+        }
+      })
+
       shapesArray.push(imageNode)
     });
 
@@ -171,7 +187,7 @@
     layer.add(newTeamOrbitCircle)
 
     // add teams & people via data
-    let teams = data.teams
+    let teams = jsonData.teams
     // let numberOfTeamSiblings = teams.length
     teams.forEach((teamData, index) => {
         if (index <= 2) {
@@ -462,7 +478,7 @@
 		}
 	});
 </script>
-
+<Modal/>
 <div class="drawer">
   <input id="my-drawer" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content">
@@ -483,6 +499,14 @@
       </a> -->
       <li><a href="/">Home</a></li>
       <li><a href="/sorting">Sorting Algorithm</a></li>
+      <li>
+        <!-- The button to open modal -->
+        <a href="#my-modal-2" class="btn">open modal href</a>
+      </li>
+      <li>
+        <!-- The button to open modal -->
+        <label for="my-modal-3" class="btn">open modal label</label>
+      </li>
     </ul>
   </div>
 </div>
