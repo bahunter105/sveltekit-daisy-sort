@@ -6,34 +6,59 @@ export const handler = init({
 	assets: new Set(["favicon.png"]),
 	mimeTypes: {".png":"image/png"},
 	_: {
-		entry: {"file":"_app/immutable/start-3a4c5661.js","imports":["_app/immutable/start-3a4c5661.js","_app/immutable/chunks/index-08fba574.js","_app/immutable/chunks/singletons-367e3a53.js"],"stylesheets":[],"fonts":[]},
+		entry: {"file":"_app/immutable/start-069d085e.js","imports":["_app/immutable/start-069d085e.js","_app/immutable/chunks/index-8c159595.js","_app/immutable/chunks/singletons-175fb998.js","_app/immutable/chunks/parse-79b54158.js"],"stylesheets":[],"fonts":[]},
 		nodes: [
 			() => import('../server/nodes/0.js'),
 			() => import('../server/nodes/1.js'),
 			() => import('../server/nodes/2.js'),
 			() => import('../server/nodes/3.js'),
-			() => import('../server/nodes/4.js')
+			() => import('../server/nodes/4.js'),
+			() => import('../server/nodes/5.js'),
+			() => import('../server/nodes/6.js'),
+			() => import('../server/nodes/7.js'),
+			() => import('../server/nodes/8.js')
 		],
 		routes: [
 			{
 				id: "/",
 				pattern: /^\/$/,
 				params: [],
-				page: { layouts: [0], errors: [1], leaf: 2 },
+				page: { layouts: [0], errors: [1], leaf: 3 },
 				endpoint: null
 			},
 			{
 				id: "/canvas",
 				pattern: /^\/canvas\/?$/,
 				params: [],
-				page: { layouts: [0], errors: [1], leaf: 3 },
+				page: { layouts: [0,2], errors: [1,,], leaf: 4 },
+				endpoint: null
+			},
+			{
+				id: "/login",
+				pattern: /^\/login\/?$/,
+				params: [],
+				page: { layouts: [0], errors: [1], leaf: 5 },
+				endpoint: null
+			},
+			{
+				id: "/logout",
+				pattern: /^\/logout\/?$/,
+				params: [],
+				page: { layouts: [0], errors: [1], leaf: 6 },
+				endpoint: null
+			},
+			{
+				id: "/register",
+				pattern: /^\/register\/?$/,
+				params: [],
+				page: { layouts: [0], errors: [1], leaf: 7 },
 				endpoint: null
 			},
 			{
 				id: "/sorting",
 				pattern: /^\/sorting\/?$/,
 				params: [],
-				page: { layouts: [0], errors: [1], leaf: 4 },
+				page: { layouts: [0], errors: [1], leaf: 8 },
 				endpoint: null
 			}
 		],

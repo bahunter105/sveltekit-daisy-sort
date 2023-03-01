@@ -1,4 +1,4 @@
-import { c as create_ssr_component, e as escape, d as each, f as add_attribute, v as validate_component } from "../../../chunks/index.js";
+import { c as create_ssr_component, e as escape, f as each, d as add_attribute, v as validate_component } from "../../../chunks/index.js";
 const Card = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { type = "person" } = $$props;
   let { subject = { name: "Arthur" } } = $$props;

@@ -4,10 +4,12 @@
     "src": ".svelte-kit/build/index.js",
     "isEntry": true,
     "imports": [
-      "_index.js"
+      "_index.js",
+      "_index2.js",
+      "_index3.js"
     ],
     "dynamicImports": [
-      ".svelte-kit/build/hooks.js"
+      "src/hooks.server.js"
     ]
   },
   "src/routes/+layout.svelte": {
@@ -18,7 +20,7 @@
       "_index.js"
     ],
     "css": [
-      "_app/immutable/assets/_layout-47618537.css"
+      "_app/immutable/assets/_layout-b358a81e.css"
     ]
   },
   "node_modules/@sveltejs/kit/src/runtime/components/error.svelte": {
@@ -29,12 +31,24 @@
       "_index.js"
     ]
   },
+  "src/routes/canvas/+layout.svelte": {
+    "file": "entries/pages/canvas/_layout.svelte.js",
+    "src": "src/routes/canvas/+layout.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index.js",
+      "_pocketbase.js",
+      "_avatar-user-circle.js"
+    ]
+  },
   "src/routes/+page.svelte": {
     "file": "entries/pages/_page.svelte.js",
     "src": "src/routes/+page.svelte",
     "isEntry": true,
     "imports": [
-      "_index.js"
+      "_index.js",
+      "_pocketbase.js",
+      "_avatar-user-circle.js"
     ],
     "assets": [
       "_app/immutable/assets/kelly-sikkema-8jjQ4hmCOcM-unsplash-becb0029.jpg"
@@ -48,6 +62,48 @@
       "_index.js"
     ]
   },
+  "src/routes/login/+page.svelte": {
+    "file": "entries/pages/login/_page.svelte.js",
+    "src": "src/routes/login/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index.js",
+      "_pocketbase.js"
+    ]
+  },
+  "src/routes/login/+page.server.js": {
+    "file": "entries/pages/login/_page.server.js",
+    "src": "src/routes/login/+page.server.js",
+    "isEntry": true,
+    "imports": [
+      "_index2.js"
+    ]
+  },
+  "src/routes/logout/+page.server.js": {
+    "file": "entries/pages/logout/_page.server.js",
+    "src": "src/routes/logout/+page.server.js",
+    "isEntry": true,
+    "imports": [
+      "_index2.js"
+    ]
+  },
+  "src/routes/register/+page.svelte": {
+    "file": "entries/pages/register/_page.svelte.js",
+    "src": "src/routes/register/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index.js",
+      "_pocketbase.js"
+    ]
+  },
+  "src/routes/register/+page.server.js": {
+    "file": "entries/pages/register/_page.server.js",
+    "src": "src/routes/register/+page.server.js",
+    "isEntry": true,
+    "imports": [
+      "_index2.js"
+    ]
+  },
   "src/routes/sorting/+page.svelte": {
     "file": "entries/pages/sorting/_page.svelte.js",
     "src": "src/routes/sorting/+page.svelte",
@@ -56,12 +112,36 @@
       "_index.js"
     ]
   },
-  ".svelte-kit/build/hooks.js": {
-    "file": "chunks/hooks.js",
-    "src": ".svelte-kit/build/hooks.js",
-    "isDynamicEntry": true
+  "src/hooks.server.js": {
+    "file": "chunks/hooks.server.js",
+    "src": "src/hooks.server.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_pocketbase.js"
+    ]
   },
   "_index.js": {
     "file": "chunks/index.js"
+  },
+  "_index2.js": {
+    "file": "chunks/index2.js"
+  },
+  "_index3.js": {
+    "file": "chunks/index3.js",
+    "imports": [
+      "_index.js"
+    ]
+  },
+  "_pocketbase.js": {
+    "file": "chunks/pocketbase.js",
+    "imports": [
+      "_index3.js"
+    ]
+  },
+  "_avatar-user-circle.js": {
+    "file": "chunks/avatar-user-circle.js",
+    "assets": [
+      "_app/immutable/assets/avatar-user-circle-dd218cda.svg"
+    ]
   }
 }
