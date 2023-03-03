@@ -40,6 +40,22 @@ function addNewTeamGroup(layer, coordinates, data = {'name': 'Name'}) {
     let newTeamX = coordinates.x
     let newTeamY = coordinates.y
 
+    // add Orbit
+    let orbitCircle = new Konva.Circle({
+      x: newTeamX,
+      y: newTeamY,
+      radius: 110,
+      offsetX: 3,
+      offsetY: 3,
+      fill: 'rgba(0,0,255,0)',
+      stroke: 'rgb(255, 168, 0, 0.5)',
+      strokeWidth: 1,
+      dash: [1,1],
+    });
+    newTeamGroup.add(orbitCircle);
+    orbitCircle.zIndex(0)
+
+
     // add newTeamCircle
     let newTeamImageObj = new Image();
     newTeamImageObj.onload = function () {
@@ -56,7 +72,7 @@ function addNewTeamGroup(layer, coordinates, data = {'name': 'Name'}) {
 
       // add the shape to the layer
       newTeamGroup.add(newTeam)
-      newTeam.zIndex(0)
+      newTeam.zIndex(1)
 
       // add other functions
       // newTeam.on('pointerdown', function () {
@@ -121,7 +137,7 @@ function addNewTeamGroup(layer, coordinates, data = {'name': 'Name'}) {
 
       // add the shape to the layer
       newTeamGroup.add(newTeamInfoButton)
-      newTeamInfoButton.zIndex(1)
+      newTeamInfoButton.zIndex(2)
       // add other functions
       // newTeamInfoButton.on('pointerdown', function () {
       //   let createPerson = stage.findOne("#createPerson")
@@ -165,7 +181,7 @@ function addNewTeamGroup(layer, coordinates, data = {'name': 'Name'}) {
 
       // add the shape to the layer
       newTeamGroup.add(newTeamOrangeAdd)
-      newTeamOrangeAdd.zIndex(2)
+      newTeamOrangeAdd.zIndex(3)
 
       // add cursor styling
       newTeamOrangeAdd.on('mouseover', function () {
@@ -177,25 +193,8 @@ function addNewTeamGroup(layer, coordinates, data = {'name': 'Name'}) {
 
       // add other functions
       newTeamOrangeAdd.on('pointerdown', function () {
-        // add Orbit
-        if(this.parent.find("Circle")[0] == undefined){
-          let orbitCircle = new Konva.Circle({
-            x: newTeamX,
-            y: newTeamY,
-            radius: 110,
-            offsetX: 3,
-            offsetY: 3,
-            fill: 'rgba(0,0,255,0)',
-            stroke: 'rgb(255, 168, 0, 0.5)',
-            strokeWidth: 1,
-            dash: [1,1],
-          });
-          newTeamGroup.add(orbitCircle);
-          orbitCircle.zIndex(0)
-        }
-
         let numberOfPeople = this.parent.find('#person').length
-        if (numberOfPeople <= 4) {
+        if (numberOfPeople < 10) {
           let coordinates = getAngleXYCordinates(newTeamX, newTeamY, 110, numberOfPeople, true)
           addNewPerson(newTeamGroup, coordinates)
         }
@@ -206,7 +205,7 @@ function addNewTeamGroup(layer, coordinates, data = {'name': 'Name'}) {
     return newTeamGroup
 }
 
-function addNewPerson(group, coordinates, data = {'name': 'Person Name', 'title': 'title'}) {
+function addNewPerson(group, coordinates, data = {'name': 'Person Name', 'role': 'role'}) {
     // add newPersonGroup
     let personGroup = new Konva.Group({
       draggable: true,
@@ -230,23 +229,37 @@ function addNewPerson(group, coordinates, data = {'name': 'Person Name', 'title'
 
       personGroup.add(newPerson)
 
-      let textName = new Konva.Text({
-          text: data.name,
-          x: coordinates.x + 20,
-          y: coordinates.y - 15,
-          fontSize: 10,
-          fontStyle: 'bold italic',
-        });
-        personGroup.add(textName)
+      if(data.name){
+        let textName = new Konva.Text({
+            text: data.name,
+            x: coordinates.x + 20,
+            y: coordinates.y - 15,
+            fontSize: 10,
+            fontStyle: 'bold italic',
+            visible: false,
+          });
+          personGroup.add(textName)
+      } else{
+        let textName = new Konva.Text({
+            text: 'Not Assigned',
+            x: coordinates.x + 20,
+            y: coordinates.y - 15,
+            fontSize: 10,
+            fontStyle: 'bold italic',
+            visible: false,
+          });
+          personGroup.add(textName)
+      }
 
-        let textTitle = new Konva.Text({
-          text: data.title,
+        let textRole = new Konva.Text({
+          text: data.role,
           x: coordinates.x + 20,
           y: coordinates.y - 3,
           fontSize: 10,
           fontStyle: 'italic',
+          visible: false,
         });
-        personGroup.add(textTitle)
+        personGroup.add(textRole)
 
       // add other functions
       // newPerson.on('pointerdown', function () {
@@ -264,9 +277,11 @@ function addNewPerson(group, coordinates, data = {'name': 'Person Name', 'title'
       // add cursor styling
       newPerson.on('mouseover', function () {
         document.body.style.cursor = 'pointer';
+        this.parent.find('Text').forEach(text => text.show())
       });
       newPerson.on('mouseout', function () {
         document.body.style.cursor = 'default';
+        this.parent.find('Text').forEach(text => text.hide())
       });
     };
     newPersonImageObj.src = newPersonSVG

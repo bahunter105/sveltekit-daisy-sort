@@ -5,13 +5,17 @@
   import plusCircleSVG from '$lib/images/plus-circle.svg'
   import createPersonSVG from '$lib/images/Create Person.svg'
   import createTeamSVG from '$lib/images/Create Team.svg'
-  import teamSVG from '$lib/images/Team Created.svg'
-  import personSVG from '$lib/images/Person Blob.svg'
-  import infoButtonSVG from '$lib/images/i-blob.svg'
-  import orangeAddSVG from '$lib/images/Orange Add.svg'
-  import createtemplateSVG from '$lib/images/Component 10.svg'
   import {addNewTeamGroup, getAngleXYCordinates, addNewPerson} from '$lib/functions/newTeamGroup.js'
-  import * as data from '$lib/data/startingData.json'
+  import * as jsonData from '$lib/data/startingData.json'
+
+  import { currentUser, pb } from '$lib/pocketbase';
+
+  export let data;
+  console.log(data)
+  const organization = data.organization
+  const groups = data.organization.expand.groups
+  const teams = data.organization.expand['teams(organization)']
+
 
   let stage
   let layer
@@ -105,6 +109,19 @@
         document.body.style.cursor = 'default';
       });
 
+      imageNode.on('pointerdown', function () {
+        document.querySelector("#my-modal-3").checked = true
+        let createPerson = stage.findOne("#createPerson")
+        let createTeam = stage.findOne("#createTeam")
+        if (createPerson.visible() === true) {
+          createPerson.hide()
+          createTeam.hide()
+        } else {
+          createPerson.show()
+          createTeam.show()
+        }
+      })
+
       shapesArray.push(imageNode)
     });
 
@@ -171,7 +188,7 @@
     layer.add(newTeamOrbitCircle)
 
     // add teams & people via data
-    let teams = data.teams
+    // let teams = jsonData.teams
     // let numberOfTeamSiblings = teams.length
     teams.forEach((teamData, index) => {
         if (index <= 2) {
@@ -179,7 +196,9 @@
           let teamGroup = addNewTeamGroup(layer, coordinates, teamData)
           // debugger
           // let numberOfTeamPeople = teamData.people.length
-          teamData.people.forEach((personData, personIndex) => {
+          let roles = teamData.expand.roles
+          roles.forEach((personData, personIndex) => {
+          // teamData.people.forEach((personData, personIndex) => {
             if (index <= 4) {
               let personCoordinates = getAngleXYCordinates(coordinates.x, coordinates.y, 110, personIndex, true)
               addNewPerson(teamGroup, personCoordinates, personData)

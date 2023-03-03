@@ -7,23 +7,23 @@
       "people": [
         {
           "name": "Person 1",
-          "title": "Title 1"
+          "role": "role 1"
         },
         {
           "name": "Person 2",
-          "title": "Title 2"
+          "role": "role 2"
         },
         {
           "name": "Person 3",
-          "title": "Title 3"
+          "role": "role 3"
         },
         {
           "name": "Person 4",
-          "title": "Title 4"
+          "role": "role 4"
         },
         {
           "name": "Person 5",
-          "title": "Title 5"
+          "role": "role 5"
         }
       ]
     },
@@ -33,15 +33,15 @@
       "people": [
         {
           "name": "Person 1",
-          "title": "Title 1"
+          "role": "role 1"
         },
         {
           "name": "Person 2",
-          "title": "Title 2"
+          "role": "role 2"
         },
         {
           "name": "Person 3",
-          "title": "Title 3"
+          "role": "role 3"
         }
       ]
     }
