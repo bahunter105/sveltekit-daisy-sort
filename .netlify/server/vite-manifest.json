@@ -20,7 +20,7 @@
       "_index.js"
     ],
     "css": [
-      "_app/immutable/assets/_layout-b358a81e.css"
+      "_app/immutable/assets/_layout-f24ed6b0.css"
     ]
   },
   "node_modules/@sveltejs/kit/src/runtime/components/error.svelte": {
@@ -59,7 +59,16 @@
     "src": "src/routes/canvas/+page.svelte",
     "isEntry": true,
     "imports": [
-      "_index.js"
+      "_index.js",
+      "_pocketbase.js"
+    ]
+  },
+  "src/routes/canvas/+page.server.js": {
+    "file": "entries/pages/canvas/_page.server.js",
+    "src": "src/routes/canvas/+page.server.js",
+    "isEntry": true,
+    "imports": [
+      "_index2.js"
     ]
   },
   "src/routes/login/+page.svelte": {
