@@ -5,18 +5,21 @@
   import plusCircleSVG from '$lib/images/plus-circle.svg'
   import createPersonSVG from '$lib/images/Create Person.svg'
   import createTeamSVG from '$lib/images/Create Team.svg'
-  import teamSVG from '$lib/images/Team Created.svg'
-  import personSVG from '$lib/images/Person Blob.svg'
-  import infoButtonSVG from '$lib/images/i-blob.svg'
-  import orangeAddSVG from '$lib/images/Orange Add.svg'
-  import createtemplateSVG from '$lib/images/Component 10.svg'
   import {addNewTeamGroup, getAngleXYCordinates, addNewPerson} from '$lib/functions/newTeamGroup.js'
-  import * as data from '$lib/data/startingData.json'
+
+  import { currentUser, pb } from '$lib/pocketbase';
+
+  export let data;
+  // console.log(data)
+  const organization = data.organization
+  const groups = data.organization.expand.groups
+  const teams = data.organization.expand['teams(organization)']
+
 
   let stage
   let layer
   // set an Array of Shapes
-  let shapesArray = []
+  // let shapesArray = []
 
   onMount(()=> {
     stage = new Konva.Stage({
@@ -29,7 +32,7 @@
     stage.add(layer)
 
     // add transform layer
-    let tr = new Konva.Transformer();
+    // let tr = new Konva.Transformer();
     // layer.add(tr);
 
     // call XY coordinates of plusCircle for later use
@@ -83,8 +86,8 @@
       layer.add(imageNode);
       imageNode.setAttrs({
         // x = radius * Math.cos(Math.PI * angle / 180);
-        x: plusCircleX + 100 * Math.cos(Math.PI * 60 / 180),
         // y = radius * Math.sin(Math.PI * angle / 180);
+        x: plusCircleX + 100 * Math.cos(Math.PI * 60 / 180),
         y: plusCircleY + 100 * Math.sin(Math.PI * 60 / 180),
         // x: 0,
         // y: 0,
@@ -105,7 +108,20 @@
         document.body.style.cursor = 'default';
       });
 
-      shapesArray.push(imageNode)
+      imageNode.on('pointerdown', function () {
+        document.querySelector("#my-modal-3").checked = true
+        let createPerson = stage.findOne("#createPerson")
+        let createTeam = stage.findOne("#createTeam")
+        if (createPerson.visible() === true) {
+          createPerson.hide()
+          createTeam.hide()
+        } else {
+          createPerson.show()
+          createTeam.show()
+        }
+      })
+
+      // shapesArray.push(imageNode)
     });
 
     // add createTeam
@@ -113,8 +129,8 @@
       layer.add(imageNode);
       imageNode.setAttrs({
         // x = radius * Math.cos(Math.PI * angle / 180);
-        x: plusCircleX + 100 * Math.cos(Math.PI * 0 / 180),
         // y = radius * Math.sin(Math.PI * angle / 180);
+        x: plusCircleX + 100 * Math.cos(Math.PI * 0 / 180),
         y: plusCircleY + 100 * Math.sin(Math.PI * 0 / 180),
         // x: 0,
         // y: 0,
@@ -153,7 +169,7 @@
         }
       })
 
-      shapesArray.push(imageNode)
+      // shapesArray.push(imageNode)
     });
 
     let newTeamOrbitCircle = new Konva.Circle({
@@ -171,48 +187,25 @@
     layer.add(newTeamOrbitCircle)
 
     // add teams & people via data
-    let teams = data.teams
-    // let numberOfTeamSiblings = teams.length
-    teams.forEach((teamData, index) => {
-        if (index <= 2) {
-          let coordinates = getAngleXYCordinates(plusCircleX, plusCircleY, 375, index)
-          let teamGroup = addNewTeamGroup(layer, coordinates, teamData)
-          // debugger
-          // let numberOfTeamPeople = teamData.people.length
-          teamData.people.forEach((personData, personIndex) => {
-            if (index <= 4) {
-              let personCoordinates = getAngleXYCordinates(coordinates.x, coordinates.y, 110, personIndex, true)
-              addNewPerson(teamGroup, personCoordinates, personData)
+    if (teams != undefined) {
+      teams.forEach((teamData, index) => {
+          if (index <= 2) {
+            let coordinates = getAngleXYCordinates(plusCircleX, plusCircleY, 375, index)
+            let teamGroup = addNewTeamGroup(layer, coordinates, teamData)
+            let roles = teamData.expand.roles
+            if (roles != undefined) {
+              roles.forEach((personData, personIndex) => {
+                if (index <= 4) {
+                  let personCoordinates = getAngleXYCordinates(coordinates.x, coordinates.y, 110, personIndex, true)
+                  addNewPerson(teamGroup, personCoordinates, personData)
+                }
+              })
             }
-          })
-        }
+          }
 
 
-    });
-
-    // let createtemplate = Konva.Image.fromURL(createtemplateSVG, (imageNode) => {
-      //   layer.add(imageNode);
-      //   imageNode.setAttrs({
-      //     x: 350,
-      //     y: 0,
-      //     width: 300,
-      //     height: 250,
-      //     draggable: true,
-      //   });
-
-      //   // add cursor styling
-      //   imageNode.on('mouseover', function () {
-      //     document.body.style.cursor = 'pointer';
-      //   });
-      //   imageNode.on('mouseout', function () {
-      //     document.body.style.cursor = 'default';
-      //   });
-
-      //   imageNode.on('mouseover', function () {
-      //       console.log(`${imageNode.x()} x ${imageNode.y()}`);
-      //     });
-      // });
-    // createtemplate
+      });
+    }
 
     // Zoooooooming
     // by scrolling
@@ -328,134 +321,107 @@
       });
 
     // Drag and Select feature
-    var selectionRectangle = new Konva.Rect({
-      fill: 'rgba(0,0,255,0.5)',
-      visible: false,
-    });
-    layer.add(selectionRectangle);
+    // var selectionRectangle = new Konva.Rect({
+    //   fill: 'rgba(0,0,255,0.5)',
+    //   visible: false,
+    // });
+    // layer.add(selectionRectangle);
 
-    var x1, y1, x2, y2;
-    stage.on('mousedown touchstart', (e) => {
-      // do nothing if we mousedown on any shape
-      if (e.target !== stage) {
-        return;
-      }
-      e.evt.preventDefault();
-      x1 = stage.getPointerPosition().x;
-      y1 = stage.getPointerPosition().y;
-      x2 = stage.getPointerPosition().x;
-      y2 = stage.getPointerPosition().y;
+    // var x1, y1, x2, y2;
+    // stage.on('mousedown touchstart', (e) => {
+    //   // do nothing if we mousedown on any shape
+    //   if (e.target !== stage) {
+    //     return;
+    //   }
+    //   e.evt.preventDefault();
+    //   x1 = stage.getPointerPosition().x;
+    //   y1 = stage.getPointerPosition().y;
+    //   x2 = stage.getPointerPosition().x;
+    //   y2 = stage.getPointerPosition().y;
 
-      selectionRectangle.visible(true);
-      selectionRectangle.width(0);
-      selectionRectangle.height(0);
-    });
+    //   selectionRectangle.visible(true);
+    //   selectionRectangle.width(0);
+    //   selectionRectangle.height(0);
+    // });
 
-    stage.on('mousemove touchmove', (e) => {
-      // do nothing if we didn't start selection
-      if (!selectionRectangle.visible()) {
-        return;
-      }
-      e.evt.preventDefault();
-      x2 = stage.getPointerPosition().x;
-      y2 = stage.getPointerPosition().y;
+    // stage.on('mousemove touchmove', (e) => {
+    //   // do nothing if we didn't start selection
+    //   if (!selectionRectangle.visible()) {
+    //     return;
+    //   }
+    //   e.evt.preventDefault();
+    //   x2 = stage.getPointerPosition().x;
+    //   y2 = stage.getPointerPosition().y;
 
-      selectionRectangle.setAttrs({
-        x: Math.min(x1, x2),
-        y: Math.min(y1, y2),
-        width: Math.abs(x2 - x1),
-        height: Math.abs(y2 - y1),
-      });
-    });
+    //   selectionRectangle.setAttrs({
+    //     x: Math.min(x1, x2),
+    //     y: Math.min(y1, y2),
+    //     width: Math.abs(x2 - x1),
+    //     height: Math.abs(y2 - y1),
+    //   });
+    // });
 
-    stage.on('mouseup touchend', (e) => {
-      // do nothing if we didn't start selection
-      if (!selectionRectangle.visible()) {
-        return;
-      }
-      e.evt.preventDefault();
-      // update visibility in timeout, so we can check it in click event
-      setTimeout(() => {
-        selectionRectangle.visible(false);
-      });
+    // stage.on('mouseup touchend', (e) => {
+    //   // do nothing if we didn't start selection
+    //   if (!selectionRectangle.visible()) {
+    //     return;
+    //   }
+    //   e.evt.preventDefault();
+    //   // update visibility in timeout, so we can check it in click event
+    //   setTimeout(() => {
+    //     selectionRectangle.visible(false);
+    //   });
 
-      // var shapes = stage.find('.rect');
-      var shapes = shapesArray;
-      var box = selectionRectangle.getClientRect();
-      var selected = shapes.filter((shape) =>
-        Konva.Util.haveIntersection(box, shape.getClientRect())
-      );
-      tr.nodes(selected);
-    });
+    //   // var shapes = stage.find('.rect');
+    //   var shapes = shapesArray;
+    //   var box = selectionRectangle.getClientRect();
+    //   var selected = shapes.filter((shape) =>
+    //     Konva.Util.haveIntersection(box, shape.getClientRect())
+    //   );
+    //   tr.nodes(selected);
+    // });
 
-    // clicks should select/deselect shapes
-    stage.on('click tap', function (e) {
-      // if we are selecting with rect, do nothing
-      if (selectionRectangle.visible()) {
-        return;
-      }
+    // // clicks should select/deselect shapes
+    // stage.on('click tap', function (e) {
+    //   // if we are selecting with rect, do nothing
+    //   if (selectionRectangle.visible()) {
+    //     return;
+    //   }
 
-      // if click on empty area - remove all selections
-      if (e.target === stage) {
-        tr.nodes([]);
-        return;
-      }
+    //   // if click on empty area - remove all selections
+    //   if (e.target === stage) {
+    //     tr.nodes([]);
+    //     return;
+    //   }
 
-      // do nothing if clicked NOT on our rectangles
-      // if (!e.target.hasName('rect')) {
-      //   return;
-      // }
+    //   // do nothing if clicked NOT on our rectangles
+    //   // if (!e.target.hasName('rect')) {
+    //   //   return;
+    //   // }
 
-      // do we pressed shift or ctrl?
-      const metaPressed = e.evt.shiftKey || e.evt.ctrlKey || e.evt.metaKey;
-      const isSelected = tr.nodes().indexOf(e.target) >= 0;
+    //   // do we pressed shift or ctrl?
+    //   const metaPressed = e.evt.shiftKey || e.evt.ctrlKey || e.evt.metaKey;
+    //   const isSelected = tr.nodes().indexOf(e.target) >= 0;
 
-      if (!metaPressed && !isSelected) {
-        // if no key pressed and the node is not selected
-        // select just one
-        tr.nodes([e.target]);
-      } else if (metaPressed && isSelected) {
-        // if we pressed keys and node was selected
-        // we need to remove it from selection:
-        const nodes = tr.nodes().slice(); // use slice to have new copy of array
-        // remove node from array
-        nodes.splice(nodes.indexOf(e.target), 1);
-        tr.nodes(nodes);
-      } else if (metaPressed && !isSelected) {
-        // add the node into selection
-        const nodes = tr.nodes().concat([e.target]);
-        tr.nodes(nodes);
-      }
-    });
-    // debugger
+    //   if (!metaPressed && !isSelected) {
+    //     // if no key pressed and the node is not selected
+    //     // select just one
+    //     tr.nodes([e.target]);
+    //   } else if (metaPressed && isSelected) {
+    //     // if we pressed keys and node was selected
+    //     // we need to remove it from selection:
+    //     const nodes = tr.nodes().slice(); // use slice to have new copy of array
+    //     // remove node from array
+    //     nodes.splice(nodes.indexOf(e.target), 1);
+    //     tr.nodes(nodes);
+    //   } else if (metaPressed && !isSelected) {
+    //     // add the node into selection
+    //     const nodes = tr.nodes().concat([e.target]);
+    //     tr.nodes(nodes);
+    //   }
+    // });
   })
-  // console.log(stage)
-  // console.log(layer)
-  // console.log(shapesArray)
 
-
-
-  // function fitStageToCanvas(){
-  //   // now we need to fit stage into parent
-  //   let canvasWidth = innerWidth;
-  //   // to do this we need to scale the stage
-  //   let scaleX = canvasWidth / stageWidth
-
-  //   // now we need to fit stage into parent
-  //   let canvasHeight = innerHeight;
-  //   // to do this we need to scale the stage
-  //   let scaleY = canvasHeight / stageHeight
-  //   // console.log(canvasWidth+" x " + canvasHeight);
-  //   // uncomment to enable "uniform stretch"
-  //   //scaleX = scaleY =Math.min(scaleX,scaleY);
-
-  //   stage.width(stageWidth * scaleX);
-  //   stage.height(stageHeight * scaleY);
-  //   stage.scale({ x: scaleX, y: scaleY });
-  //   stage.draw();
-  // }
-
-  // canvas.addEventListener('resize', fitStageToCanvas())
   onDestroy(() => {
 		if (stage) {
 			stage.destroy();

@@ -2,7 +2,13 @@
   import { currentUser, pb } from '$lib/pocketbase';
   import { applyAction, enhance } from '$app/forms';
   import avatar from '$lib/images/avatar-user-circle.svg'
+  import Modal from '$lib/Modal.svelte'
+  // /** @type {import('./$types').ActionData} */
+  // export let form;
+
 </script>
+
+<Modal/>
 <div class="drawer">
   <input id="my-drawer" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content">
