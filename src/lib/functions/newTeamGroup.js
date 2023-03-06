@@ -4,7 +4,7 @@
   import orangeAddSVG from '$lib/images/Orange Add.svg'
   import newPersonSVG from '$lib/images/Person Blob.svg'
 
-function getAngleXYCordinates(originX, originY, radius, numberOfSiblings,person = false) {
+function getAngleXYCordinates(originX, originY, radius, numberOfSiblings) { //,person = false //) {
   // let newRadius = radius + 250*(Math.ceil(((numberOfSiblings+1)-1)/3))
 
   let angle
