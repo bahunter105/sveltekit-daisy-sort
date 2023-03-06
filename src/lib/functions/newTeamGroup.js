@@ -8,21 +8,22 @@ function getAngleXYCordinates(originX, originY, radius, numberOfSiblings,person 
   // let newRadius = radius + 250*(Math.ceil(((numberOfSiblings+1)-1)/3))
 
   let angle
-  if(person===true){
-    angle = -45 + (numberOfSiblings*25)
-  }else{
-  switch((numberOfSiblings+1) % 3) {
-    case 0:
-      angle = 85
-      break;
-    case 1:
-      angle = 5
-      break;
-    case 2:
-      angle = 45
-      break;
-  };
-  }
+  // if(person===true){
+    // angle = -45 + (numberOfSiblings*25)
+    angle = -45 + (numberOfSiblings*45)
+  // }else{
+  // switch((numberOfSiblings+1) % 3) {
+  //   case 0:
+  //     angle = 85
+  //     break;
+  //   case 1:
+  //     angle = 5
+  //     break;
+  //   case 2:
+  //     angle = 45
+  //     break;
+  // };
+  // }
 
 
   let x = originX + radius * Math.cos(Math.PI * angle / 180)
@@ -194,7 +195,8 @@ function addNewTeamGroup(layer, coordinates, data = {'name': 'Name'}) {
       // add other functions
       newTeamOrangeAdd.on('pointerdown', function () {
         let numberOfPeople = this.parent.find('#person').length
-        if (numberOfPeople < 10) {
+        // set max number of team members to 8
+        if (numberOfPeople < 8) {
           let coordinates = getAngleXYCordinates(newTeamX, newTeamY, 110, numberOfPeople, true)
           addNewPerson(newTeamGroup, coordinates)
         }

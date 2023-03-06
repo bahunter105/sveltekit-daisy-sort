@@ -37,7 +37,7 @@
 
     // call XY coordinates of plusCircle for later use
     let plusCircleX = stage.width() * 0.0825
-    let plusCircleY = stage.height() * 0.09335219236
+    let plusCircleY = stage.height() * 0.55
 
     // add the plusCircle
     let plusCirlceImageObj = new Image();
@@ -109,7 +109,7 @@
       });
 
       imageNode.on('pointerdown', function () {
-        document.querySelector("#my-modal-3").checked = true
+        // document.querySelector("#my-modal-3").checked = true
         let createPerson = stage.findOne("#createPerson")
         let createTeam = stage.findOne("#createTeam")
         if (createPerson.visible() === true) {
@@ -154,9 +154,11 @@
       // add addNewTeamGroup function
       imageNode.on('pointerdown', function () {
         let numberOfSiblings = stage.find('#teamGroup').length
-        if (numberOfSiblings <= 2) {
-          let coordinates = getAngleXYCordinates(plusCircleX, plusCircleY, 375, numberOfSiblings)
-          addNewTeamGroup(layer, coordinates)
+        // set max number of teams to 8
+        if (numberOfSiblings <= 7) {
+          document.querySelector("#my-modal-3").checked = true
+          // let coordinates = getAngleXYCordinates(plusCircleX, plusCircleY, 375, numberOfSiblings)
+          // addNewTeamGroup(layer, coordinates)
         }
         let createPerson = stage.findOne("#createPerson")
         let createTeam = stage.findOne("#createTeam")
@@ -189,19 +191,21 @@
     // add teams & people via data
     if (teams != undefined) {
       teams.forEach((teamData, index) => {
-          if (index <= 2) {
-            let coordinates = getAngleXYCordinates(plusCircleX, plusCircleY, 375, index)
-            let teamGroup = addNewTeamGroup(layer, coordinates, teamData)
-            let roles = teamData.expand.roles
-            if (roles != undefined) {
-              roles.forEach((personData, personIndex) => {
-                if (index <= 4) {
-                  let personCoordinates = getAngleXYCordinates(coordinates.x, coordinates.y, 110, personIndex, true)
-                  addNewPerson(teamGroup, personCoordinates, personData)
-                }
-              })
-            }
+        // set max number of teams to 8
+        if (index <= 7) {
+          let coordinates = getAngleXYCordinates(plusCircleX, plusCircleY, 375, index)
+          let teamGroup = addNewTeamGroup(layer, coordinates, teamData)
+          let roles = teamData.expand.roles
+          if (roles != undefined) {
+            roles.forEach((personData, personIndex) => {
+              // set max number of team members to 8
+              if (index <= 7) {
+                let personCoordinates = getAngleXYCordinates(coordinates.x, coordinates.y, 110, personIndex, true)
+                addNewPerson(teamGroup, personCoordinates, personData)
+              }
+            })
           }
+        }
 
 
       });
@@ -420,6 +424,9 @@
     //     tr.nodes(nodes);
     //   }
     // });
+
+    // Change scale to fit entire circle
+    stage.scale({ x: .85, y: .85 });
   })
 
   onDestroy(() => {
